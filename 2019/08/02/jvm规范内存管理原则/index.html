@@ -1,0 +1,575 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="jvm,java,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0">
+
+
+
+
+
+
+<meta name="description" content="1. 运行时数据区​        JVM运行时数据区由5部分组成，分别是程序计数器、虚拟机栈、本地方法栈、堆、方法区。这个是由《Java虚拟机规范》所指定的。每个区域有各自的用途。">
+<meta name="keywords" content="jvm,java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jvm规范内存管理原则">
+<meta property="og:url" content="http://rubb1sh.cn/2019/08/02/jvm规范内存管理原则/index.html">
+<meta property="og:site_name" content="rubb1sh">
+<meta property="og:description" content="1. 运行时数据区​        JVM运行时数据区由5部分组成，分别是程序计数器、虚拟机栈、本地方法栈、堆、方法区。这个是由《Java虚拟机规范》所指定的。每个区域有各自的用途。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://rubb1sh.cn/images/JMM.jpg">
+<meta property="og:updated_time" content="2019-08-07T16:14:52.116Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="jvm规范内存管理原则">
+<meta name="twitter:description" content="1. 运行时数据区​        JVM运行时数据区由5部分组成，分别是程序计数器、虚拟机栈、本地方法栈、堆、方法区。这个是由《Java虚拟机规范》所指定的。每个区域有各自的用途。">
+<meta name="twitter:image" content="http://rubb1sh.cn/images/JMM.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"hide"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> jvm规范内存管理原则 | rubb1sh </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">rubb1sh</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">个人技术博客</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                jvm规范内存管理原则
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-08-02T22:41:24+08:00" content="2019-08-02">
+              2019-08-02
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/jvm/" itemprop="url" rel="index">
+                    <span itemprop="name">jvm</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="1-运行时数据区"><a href="#1-运行时数据区" class="headerlink" title="1. 运行时数据区"></a>1. 运行时数据区</h3><p>​        JVM运行时数据区由5部分组成，分别是程序计数器、虚拟机栈、本地方法栈、堆、方法区。这个是由《Java虚拟机规范》所指定的。每个区域有各自的用途。</p>
+<a id="more"></a>
+
+<p><img src="/images/JMM.jpg" alt="java虚拟机内存分配图"></p>
+<h3 id="2-程序计数器"><a href="#2-程序计数器" class="headerlink" title="2. 程序计数器"></a>2. 程序计数器</h3><p>​        程序计数器（Program Counter Register）是一块很小的内存，他是线程私有的，每个线程都维护自己的程序计数器。程序计数器用于记录：当前线程所执行的字节码的行号指示器。<strong>字节码解释器</strong>工作时，通过改变这个计数器的值来选取下一条跳转到的字节码指令，并执行。</p>
+<p>​        如果线程正在执行一个java方法，计数器记录的是正在执行的虚拟机字节码指令的地址。如果是native方法，计数器的值为空（Undefined）。</p>
+<p>​        此外，由于计数器占用的内存很小，因此这部分的内存是不会抛出OutOfMemoryError的错误的。</p>
+<h3 id="3-虚拟机栈"><a href="#3-虚拟机栈" class="headerlink" title="3. 虚拟机栈"></a>3. 虚拟机栈</h3><p>​        与程序计数器一样，虚拟机栈也是线程私有的，并且他和线程的生命周期相同。虚拟机栈描述的是java方法执行的内存模型，每个方法在执行时，都会创建一个栈帧（stack frame）。每个栈帧用于记录局部变量表、操作数、动态链接等用于描述一个正在执行的方法的信息。当方法执行完，相应的栈帧会出栈。</p>
+<p>​        虚拟机栈中的局部变量表存放了8种基本类型（short、boolean、int、byte、char、float、double、long)和一个对象引用类型（reference）。</p>
+<p>​        Java虚拟机规范规定了当栈深度超过固定标准时会抛出StackOverflowError，如果是动态扩展内存的虚拟机栈则只会抛出OutOfMemoryError。</p>
+<h3 id="4-本地方法栈"><a href="#4-本地方法栈" class="headerlink" title="4. 本地方法栈"></a>4. 本地方法栈</h3><p>​        存放线程用到的Native方法。本地方法栈也是线程私有的。</p>
+<h3 id="5-Java堆"><a href="#5-Java堆" class="headerlink" title="5. Java堆"></a>5. Java堆</h3><p>​        Java堆用于存放和管理Java对象。它是JMM中，占用内存最大的一块区域。Java堆在物理内存上可以是不连续的。它是垃圾收集器主要管理的区域。因此，Java堆分：新生代和老年代。</p>
+<p>​        可以通过-Xmx和-Xms来限制Java堆的内存大小。</p>
+<h3 id="6-方法区"><a href="#6-方法区" class="headerlink" title="6. 方法区"></a>6. 方法区</h3><p>​        方法区是用于存储虚拟机加载的类信息、常量、静态变量等。Java虚拟机规范中把方法区和堆描述为一个逻辑部分，但是方法区和堆应该是分开的。方法区因为内存改变不频繁，因此也称为<strong>永久代</strong>(Permanent Generation)。可通过-XX:MaxPermSize来指定方法区的内存上限。</p>
+<h3 id="7-运行时常量池"><a href="#7-运行时常量池" class="headerlink" title="7. 运行时常量池"></a>7. 运行时常量池</h3><p>​        运行时常量池（Runtime Constant Pool）是方法区的一部分。一般用于存放Class文件中的各种字面量和符号引用。</p>
+<h3 id="8-直接内存"><a href="#8-直接内存" class="headerlink" title="8. 直接内存"></a>8. 直接内存</h3><p>​        直接内存不是虚拟机运行时数据区的一部分。直接内存大小取决于本机的内存大小，因此当内存不够时，也会抛出OutOfMemoryError的异常。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/jvm/" rel="tag">#jvm</a>
+          
+            <a href="/tags/java/" rel="tag">#java</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/02/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/08/03/HTTP协议/" rel="prev" title="HTTP协议">
+                HTTP协议 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="https://avatars3.githubusercontent.com/u/22258742?s=460&v=4" alt="rubb1sh">
+          <p class="site-author-name" itemprop="name">rubb1sh</p>
+          <p class="site-description motion-element" itemprop="description">用于记录个人日常打代码遇到的技术问题</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/rubb1sh" target="_blank">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-运行时数据区"><span class="nav-number">1.</span> <span class="nav-text">1. 运行时数据区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-程序计数器"><span class="nav-number">2.</span> <span class="nav-text">2. 程序计数器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-虚拟机栈"><span class="nav-number">3.</span> <span class="nav-text">3. 虚拟机栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-本地方法栈"><span class="nav-number">4.</span> <span class="nav-text">4. 本地方法栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-Java堆"><span class="nav-number">5.</span> <span class="nav-text">5. Java堆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-方法区"><span class="nav-number">6.</span> <span class="nav-text">6. 方法区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-运行时常量池"><span class="nav-number">7.</span> <span class="nav-text">7. 运行时常量池</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-直接内存"><span class="nav-number">8.</span> <span class="nav-text">8. 直接内存</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">rubb1sh</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=0.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
