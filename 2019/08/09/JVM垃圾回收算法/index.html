@@ -66,7 +66,7 @@
 <meta property="og:description" content="JVM垃圾回收机制​        jvm垃圾回收机制看《jvm入门》就了解过，加上这部分内容不难，自己列一下要记的东西，准备面试就行。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://rubb1sh.cn/images/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95.png">
-<meta property="og:updated_time" content="2019-08-09T11:41:25.275Z">
+<meta property="og:updated_time" content="2019-08-09T12:26:42.343Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM垃圾回收算法">
 <meta name="twitter:description" content="JVM垃圾回收机制​        jvm垃圾回收机制看《jvm入门》就了解过，加上这部分内容不难，自己列一下要记的东西，准备面试就行。">
@@ -290,6 +290,10 @@
 <h3 id="垃圾回收算法"><a href="#垃圾回收算法" class="headerlink" title="垃圾回收算法"></a>垃圾回收算法</h3><p>​        三种：标记清除算法（没被使用的对象，直接清除）、复制算法（在之前的基础上，分成两块内存，在进行垃圾回收时复制到另一块）、标记压缩算法（两个阶段：标记结算和压缩阶段，压缩阶段把内存压缩到一边）。</p>
 <h3 id="分代"><a href="#分代" class="headerlink" title="分代"></a>分代</h3><p>​        hotSpot虚拟机内存分为Eden（较大）和两块Survivor（较小）。</p>
 <p><img src="/images/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95.png" alt="垃圾回收算法"></p>
+<h3 id="垃圾回收类型"><a href="#垃圾回收类型" class="headerlink" title="垃圾回收类型"></a>垃圾回收类型</h3><h4 id="1-Minor-GC-Young-GC"><a href="#1-Minor-GC-Young-GC" class="headerlink" title="1. Minor GC(Young GC)"></a>1. Minor GC(Young GC)</h4><p>​        当 JVM 无法为一个新的对象分配空间时会触发 Minor GC。</p>
+<h4 id="2-Major-GC"><a href="#2-Major-GC" class="headerlink" title="2. Major GC"></a>2. Major GC</h4><p>​        “老年代”内存不足时，触发Major GC。</p>
+<h4 id="3-Full-GC"><a href="#3-Full-GC" class="headerlink" title="3. Full GC"></a>3. Full GC</h4><p>​        Full GC 是清理整个堆空间 —— 包括年轻代、老年代和永久代（如果有的话）。因此 Full GC 可以说是 Minor GC 和 Major GC 的结合。</p>
+<h4 id="4-Stop-The-World"><a href="#4-Stop-The-World" class="headerlink" title="4. Stop-The-World"></a>4. Stop-The-World</h4><p>​        在进行垃圾回收时因为标记或清理的需要，必须让所有执行任务的线程停止执行任务，从而让垃圾回收线程回收垃圾的时间间隔。</p>
 
       
     </div>
@@ -322,6 +326,10 @@
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/08/21/git命令大全/" rel="prev" title="git命令大全">
+                git命令大全 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -387,7 +395,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-count">7</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -395,7 +403,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -404,7 +412,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -446,7 +454,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM垃圾回收机制"><span class="nav-number">1.</span> <span class="nav-text">JVM垃圾回收机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GC-root"><span class="nav-number">2.</span> <span class="nav-text">GC root</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#垃圾回收算法"><span class="nav-number">3.</span> <span class="nav-text">垃圾回收算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分代"><span class="nav-number">4.</span> <span class="nav-text">分代</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM垃圾回收机制"><span class="nav-number">1.</span> <span class="nav-text">JVM垃圾回收机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GC-root"><span class="nav-number">2.</span> <span class="nav-text">GC root</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#垃圾回收算法"><span class="nav-number">3.</span> <span class="nav-text">垃圾回收算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分代"><span class="nav-number">4.</span> <span class="nav-text">分代</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#垃圾回收类型"><span class="nav-number">5.</span> <span class="nav-text">垃圾回收类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Minor-GC-Young-GC"><span class="nav-number">5.1.</span> <span class="nav-text">1. Minor GC(Young GC)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Major-GC"><span class="nav-number">5.2.</span> <span class="nav-text">2. Major GC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Full-GC"><span class="nav-number">5.3.</span> <span class="nav-text">3. Full GC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-Stop-The-World"><span class="nav-number">5.4.</span> <span class="nav-text">4. Stop-The-World</span></a></li></ol></li></ol></div>
             
           </div>
         </section>
