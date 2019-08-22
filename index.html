@@ -217,6 +217,138 @@
             
               
                 
+                <a class="post-title-link" href="/2019/08/23/macos中mysql进程不能被关闭问题/" itemprop="url">
+                  macOS中mysql进程不能被关闭问题
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-08-23T01:44:31+08:00" content="2019-08-23">
+              2019-08-23
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/mysql/macOS/" itemprop="url" rel="index">
+                    <span itemprop="name">macOS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>​        在macOS下安装mysql数据库有两种方式，1种是通过使用brew安装，1种是通过去mysql官网下载包安装。</p>
+<p>使用后者安装的好处是，mysql的安装包会自动配置好大部分内容，并且能在系统偏好设置中管理mysql数据库的开关。</p>
+<p><img src="/images/%E7%B3%BB%E7%BB%9F%E5%81%8F%E5%A5%BD%E8%AE%BE%E7%BD%AE.png" alt="系统偏好设置"></p>
+<h3 id="通过dmg包安装"><a href="#通过dmg包安装" class="headerlink" title="通过dmg包安装"></a>通过dmg包安装</h3><p>​        使用后者安装，mysql会创建一个_mysql用户，这个用户是mysqld进程的拥有者。并且macOS会把这个mysqld进程设置为守护进程。所以通过kill -9命令关闭这个进程是无效的。因此需要解锁，通过命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo launchctl unload -w /Library/LaunchDaemons/com.oracle.oss.mysql.mysqld.plist</span><br></pre></td></tr></table></figure>
+
+<p>​        此外，通过后者安装，会在/Library/PreferencePanes有一个mysql的组件信息（这也就是为什么在系统偏好设置中有mysql，而brew安装没有，因为brew安装不会在/Library/PreferencePanes添加mysql组件信息）。</p>
+<p>​        mysql安装在/usr/local下（和通常的安装情况类似）。但是mysql的data文件夹普通用户没有访问权限，如果需要查看里面的err日志，需要通过root用户查看（或者_mysql用户，因为是这个文件夹的onwer）</p>
+<p>​        此外，mysql的启动通过support-files里的mysql.server启动。命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo ./mysql.server start</span><br><span class="line">sudo ./mysql.server stop</span><br><span class="line">sudo ./mysql.server restart</span><br></pre></td></tr></table></figure>
+
+<h3 id="通过brew安装"><a href="#通过brew安装" class="headerlink" title="通过brew安装"></a>通过brew安装</h3><p>​        我不是，不过用brew安装应该会更好管理。</p>
+<h3 id="此外"><a href="#此外" class="headerlink" title="此外"></a>此外</h3><p>​        此外，高版本的mysql好像已经不用my.cnf配置文件了，默认好像没有（/etc里没找到）。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2019/08/21/git命令大全/" itemprop="url">
                   git命令大全
                 </a>
@@ -968,7 +1100,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-count">8</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -976,7 +1108,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -985,7 +1117,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
