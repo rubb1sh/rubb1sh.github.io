@@ -57,19 +57,19 @@
 
 
 
-<meta name="description" content="​        在macOS下安装mysql数据库有两种方式，1种是通过使用brew安装，1种是通过去mysql官网下载包安装。 使用后者安装的好处是，mysql的安装包会自动配置好大部分内容，并且能在系统偏好设置中管理mysql数据库的开关。  通过dmg包安装​        使用后者安装，mysql会创建一个_mysql用户，这个用户是mysqld进程的拥有者。并且macOS会把这个mys">
+<meta name="description" content="​        在macOS下安装mysql数据库有两种方式，1种是通过使用brew安装，1种是通过去mysql官网下载包安装。 使用后者安装的好处是，mysql的安装包会自动配置好大部分内容，并且能在系统偏好设置中管理mysql数据库的开关。">
 <meta name="keywords" content="mysql,macOS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="macOS中mysql进程不能被关闭问题">
 <meta property="og:url" content="http://rubb1sh.cn/2019/08/23/macos中mysql进程不能被关闭问题/index.html">
 <meta property="og:site_name" content="rubb1sh">
-<meta property="og:description" content="​        在macOS下安装mysql数据库有两种方式，1种是通过使用brew安装，1种是通过去mysql官网下载包安装。 使用后者安装的好处是，mysql的安装包会自动配置好大部分内容，并且能在系统偏好设置中管理mysql数据库的开关。  通过dmg包安装​        使用后者安装，mysql会创建一个_mysql用户，这个用户是mysqld进程的拥有者。并且macOS会把这个mys">
+<meta property="og:description" content="​        在macOS下安装mysql数据库有两种方式，1种是通过使用brew安装，1种是通过去mysql官网下载包安装。 使用后者安装的好处是，mysql的安装包会自动配置好大部分内容，并且能在系统偏好设置中管理mysql数据库的开关。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://rubb1sh.cn/images/%E7%B3%BB%E7%BB%9F%E5%81%8F%E5%A5%BD%E8%AE%BE%E7%BD%AE.png">
-<meta property="og:updated_time" content="2019-08-22T18:12:19.779Z">
+<meta property="og:updated_time" content="2019-08-23T06:50:37.385Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="macOS中mysql进程不能被关闭问题">
-<meta name="twitter:description" content="​        在macOS下安装mysql数据库有两种方式，1种是通过使用brew安装，1种是通过去mysql官网下载包安装。 使用后者安装的好处是，mysql的安装包会自动配置好大部分内容，并且能在系统偏好设置中管理mysql数据库的开关。  通过dmg包安装​        使用后者安装，mysql会创建一个_mysql用户，这个用户是mysqld进程的拥有者。并且macOS会把这个mys">
+<meta name="twitter:description" content="​        在macOS下安装mysql数据库有两种方式，1种是通过使用brew安装，1种是通过去mysql官网下载包安装。 使用后者安装的好处是，mysql的安装包会自动配置好大部分内容，并且能在系统偏好设置中管理mysql数据库的开关。">
 <meta name="twitter:image" content="http://rubb1sh.cn/images/%E7%B3%BB%E7%BB%9F%E5%81%8F%E5%A5%BD%E8%AE%BE%E7%BD%AE.png">
 
 
@@ -290,6 +290,8 @@
       
         <p>​        在macOS下安装mysql数据库有两种方式，1种是通过使用brew安装，1种是通过去mysql官网下载包安装。</p>
 <p>使用后者安装的好处是，mysql的安装包会自动配置好大部分内容，并且能在系统偏好设置中管理mysql数据库的开关。</p>
+<a id="more"></a>
+
 <p><img src="/images/%E7%B3%BB%E7%BB%9F%E5%81%8F%E5%A5%BD%E8%AE%BE%E7%BD%AE.png" alt="系统偏好设置"></p>
 <h3 id="通过dmg包安装"><a href="#通过dmg包安装" class="headerlink" title="通过dmg包安装"></a>通过dmg包安装</h3><p>​        使用后者安装，mysql会创建一个_mysql用户，这个用户是mysqld进程的拥有者。并且macOS会把这个mysqld进程设置为守护进程。所以通过kill -9命令关闭这个进程是无效的。因此需要解锁，通过命令：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo launchctl unload -w /Library/LaunchDaemons/com.oracle.oss.mysql.mysqld.plist</span><br></pre></td></tr></table></figure>
