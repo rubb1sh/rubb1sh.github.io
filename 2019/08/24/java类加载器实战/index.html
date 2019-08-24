@@ -67,7 +67,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://rubb1sh.cn/images/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B.png">
 <meta property="og:image" content="http://rubb1sh.cn/images/%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84.png">
-<meta property="og:updated_time" content="2019-08-24T16:36:22.431Z">
+<meta property="og:updated_time" content="2019-08-24T17:30:44.912Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java类加载器实战">
 <meta name="twitter:description" content="​        JVM规范中，java的类加载过程有7个阶段。由于其中类加载阶段可用通过用户自定义的类加载器进行加载。因此在记录一下java的类加载机制，以及双亲委派模型以及该模型的“破坏”（其实就是为了面试）">
@@ -252,6 +252,18 @@
 
                 
                 
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/类加载器/" itemprop="url" rel="index">
+                    <span itemprop="name">类加载器</span>
+                  </a>
+                </span>
+
+                
+                
 
               
             </span>
@@ -282,9 +294,9 @@
 
 <h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>​        类加载，就是虚拟机通过类名称获取类的二进制流，然后在<strong>方法区</strong>生成代表这个类的Class对象。而开发人员，可以自定义加载器如何获取字节流的方式（具体的原因需要多思考，因为自己也不是很理解）。</p>
 <h3 id="类加载器类型"><a href="#类加载器类型" class="headerlink" title="类加载器类型"></a>类加载器类型</h3><ol>
-<li>Bootstrap启动类加载器，负责加载jdk_home/lib目录下的核心api类。<strong>启动类加载器是用c++写得</strong></li>
-<li>Extension扩展类加载器，负责加载jdk_home/lib/ext目录下的jar包或-Djava.ext.dirs指定目录下jar包。 </li>
-<li>Application应用类加载器，负责加载用户类路径ClassPath下jar包。</li>
+<li>Bootstrap启动类加载器，负责加载jdk_home/lib目录下的核心api类，它负责将 <code>&lt;Java_Runtime_Home&gt;/lib</code>下面的核心类库或<code>-Xbootclasspath</code>选项指定的jar包加载到内存中。</li>
+<li>Extension扩展类加载器，扩展类加载器是由Sun的<code>ExtClassLoader（sun.misc.Launcher$ExtClassLoader）</code>实现的。负责加载<code>jdk_home/lib/ext</code>目录下的jar包或<code>-Djava.ext.dirs</code>指定目录下jar包。 </li>
+<li>Application应用类加载器，系统类加载器是由 Sun的 <code>AppClassLoader（sun.misc.Launcher$AppClassLoader）</code>实现的。负责加载用户类路径<code>ClassPath</code>下jar包。</li>
 </ol>
 <h3 id="双亲委派模型"><a href="#双亲委派模型" class="headerlink" title="双亲委派模型"></a>双亲委派模型</h3><p>​        类加载器收到加载请求时，它首先让他的父类加载器去尝试加载（通过组合关系拥有父类加载器）。如果父类加载器不能完成加载，子类加载器才会尝试加载）。</p>
 <p><img src="/images/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B.png" alt="双亲委派模型"></p>
@@ -305,7 +317,8 @@
 <p>​        Main类，自定义类加载器，去加载Test类。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> moujunshu</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@title</span>: Main</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@projectName</span> Test</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@description</span>: TODO</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2019-08-2421:41</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClassLoader</span> <span class="keyword">extends</span> <span class="title">ClassLoader</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> String classPath;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">MyClassLoader</span><span class="params">(String classPath)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.classPath = classPath;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">byte</span>[] loadByte(String name) <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">            FileInputStream fis = <span class="keyword">new</span> FileInputStream(classPath + <span class="string">"/"</span> + name</span><br><span class="line">                    + <span class="string">".class"</span>);</span><br><span class="line">            <span class="keyword">int</span> len = fis.available();</span><br><span class="line">            <span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[len];</span><br><span class="line">            fis.read(data);</span><br><span class="line">            fis.close();</span><br><span class="line">            <span class="keyword">return</span> data;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">protected</span> Class&lt;?&gt; findClass(String name) <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">byte</span>[] data = loadByte(name);</span><br><span class="line">                <span class="keyword">return</span> defineClass(name, data, <span class="number">0</span>, data.length);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> ClassNotFoundException();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        MyClassLoader classLoader = <span class="keyword">new</span> MyClassLoader(<span class="string">"/Users/moujunshu/IdeaProjects/Test/src/sii"</span>);</span><br><span class="line">        Class clazz = classLoader.loadClass(<span class="string">"Test"</span>);</span><br><span class="line">        Object obj = clazz.newInstance();</span><br><span class="line">        System.out.println(obj);</span><br><span class="line">        Method helloMethod = clazz.getDeclaredMethod(<span class="string">"hello"</span>, <span class="keyword">null</span>);</span><br><span class="line">        helloMethod.invoke(obj, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
+<h3 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h3><h4 id="1-不同的类加载器加载同一个类如何区分？"><a href="#1-不同的类加载器加载同一个类如何区分？" class="headerlink" title="1. 不同的类加载器加载同一个类如何区分？"></a>1. 不同的类加载器加载同一个类如何区分？</h4><p>​        在Java中，一个类用其完全匹配类名(fully qualified class name)作为标识，这里指的完全匹配类名包括包名和类名。<strong>但在JVM中一个类用其全名和一个加载类ClassLoader的实例作为唯一标识，不同类加载器加载的类将被置于不同的命名空间。</strong></p>
+<h4 id="深入理解Java类加载器-1-：Java类加载原理解析"><a href="#深入理解Java类加载器-1-：Java类加载原理解析" class="headerlink" title="深入理解Java类加载器(1)：Java类加载原理解析"></a><a href="https://blog.csdn.net/zhoudaxia/article/details/35824249" target="_blank" rel="noopener">深入理解Java类加载器(1)：Java类加载原理解析</a></h4>
       
     </div>
 
@@ -410,7 +423,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -461,7 +474,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类加载器类型"><span class="nav-number">2.</span> <span class="nav-text">类加载器类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双亲委派模型"><span class="nav-number">3.</span> <span class="nav-text">双亲委派模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#源码分析"><span class="nav-number">4.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#loadClass"><span class="nav-number">4.1.</span> <span class="nav-text">loadClass</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#findClass"><span class="nav-number">4.2.</span> <span class="nav-text">findClass</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#defineClass"><span class="nav-number">4.3.</span> <span class="nav-text">defineClass</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实战"><span class="nav-number">5.</span> <span class="nav-text">实战</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类加载器类型"><span class="nav-number">2.</span> <span class="nav-text">类加载器类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双亲委派模型"><span class="nav-number">3.</span> <span class="nav-text">双亲委派模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#源码分析"><span class="nav-number">4.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#loadClass"><span class="nav-number">4.1.</span> <span class="nav-text">loadClass</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#findClass"><span class="nav-number">4.2.</span> <span class="nav-text">findClass</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#defineClass"><span class="nav-number">4.3.</span> <span class="nav-text">defineClass</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实战"><span class="nav-number">5.</span> <span class="nav-text">实战</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见问题"><span class="nav-number">6.</span> <span class="nav-text">常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-不同的类加载器加载同一个类如何区分？"><span class="nav-number">6.1.</span> <span class="nav-text">1. 不同的类加载器加载同一个类如何区分？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#深入理解Java类加载器-1-：Java类加载原理解析"><span class="nav-number">6.2.</span> <span class="nav-text">深入理解Java类加载器(1)：Java类加载原理解析</span></a></li></ol></li></ol></div>
             
           </div>
         </section>
