@@ -475,99 +475,6 @@
             
               
                 
-                <a class="post-title-link" href="/2019/10/04/TCP/" itemprop="url">
-                  TCP
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2019-10-04T14:10:15+08:00" content="2019-10-04">
-              2019-10-04
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="流量控制"><a href="#流量控制" class="headerlink" title="流量控制"></a>流量控制</h3><p>​        流量控制是为了消除发送方使接收方缓存溢出的可能性，因此流量控制是一个<strong>速度匹配服务</strong>。</p>
-<h4 id="1-滑动窗口"><a href="#1-滑动窗口" class="headerlink" title="1. 滑动窗口"></a>1. 滑动窗口</h4><p>​        为了提高信道的利用率，TCP协议使用连续<strong>ARQ协议</strong>，而不是停止等待协议。就是，一次传多个分组，然后<strong>等待确认</strong>，而不是发送一个分组，就等待确认。</p>
-<p>​        TCP通过给发送方维护一个<strong>接收窗口</strong>的变量来控制流量。但是，因为TCP是<strong>全双工通信</strong>。因此，在连接两端的发送方都各自维护一个<strong>接收窗口</strong>。        </p>
-<h4 id="2-回退N步"><a href="#2-回退N步" class="headerlink" title="2. 回退N步"></a>2. 回退N步</h4><p>​        GBN协议会丢弃所有失序的分组。</p>
-<h4 id="2-选择重传"><a href="#2-选择重传" class="headerlink" title="2. 选择重传"></a>2. 选择重传</h4><p>​        优化GBN协议，避免回退N步重传，只重传丢失的分组。在分组交付给应用层之前，接收方需要确保窗口内的分组都接受到。如果对于一次失序的分组到达，会先放在缓存中，等待窗口内的分组都到达，例如对于一个4-8的窗口，6-8先到了，会放在缓存中等待，直到4到了，才将这个窗口的分组一并交付给上层。接收方接收到了6-8的分组。也会给发送方发送ACK。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
                 <a class="post-title-link" href="/2019/08/25/双亲委派模型的破坏/" itemprop="url">
                   双亲委派模型的破坏
                 </a>
@@ -1379,6 +1286,128 @@
 
 
     
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2019/08/02/jvm规范内存管理原则/" itemprop="url">
+                  jvm规范内存管理原则
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-08-02T22:41:24+08:00" content="2019-08-02">
+              2019-08-02
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/jvm/" itemprop="url" rel="index">
+                    <span itemprop="name">jvm</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="1-运行时数据区"><a href="#1-运行时数据区" class="headerlink" title="1. 运行时数据区"></a>1. 运行时数据区</h3><p>​        JVM运行时数据区由5部分组成，分别是程序计数器、虚拟机栈、本地方法栈、堆、方法区。这个是由《Java虚拟机规范》所指定的。每个区域有各自的用途。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2019/08/02/jvm规范内存管理原则/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
   </section>
 
   
@@ -1422,7 +1451,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-count">11</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
