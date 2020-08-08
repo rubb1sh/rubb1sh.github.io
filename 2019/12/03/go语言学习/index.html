@@ -57,17 +57,17 @@
 
 
 
-<meta name="description" content="指针​        go语言有指针（像c），不过没有指针的运算（防止非法内存访问） 包的初始化​        每个包都有一个可以包含这个初始化函数。这个函数不能被调用。 1func init() &amp;#123; /*...*/ &amp;#125;  作用域作用域和生命周期有所不同。 生命周期是指：一个变量被程序引用的起止时间。 作用域：是指声明的程序出现的区域。（一般描述一个函数或者变量，他是一个编译">
+<meta name="description" content="指针​        go语言有指针（像c），不过没有指针的运算（防止非法内存访问） 包的初始化​        每个包都有一个可以包含这个初始化函数。这个函数不能被调用。 1func init() &amp;#123; /*...*/ &amp;#125;  作用域作用域和生命周期有所不同。 生命周期是指：一个变量被程序引用的起止时间。 作用域：是指声明的程序出现的区域。（一般描述一个函数或者变量，他是一个">
 <meta property="og:type" content="article">
 <meta property="og:title" content="go语言学习">
 <meta property="og:url" content="http://rubb1sh.cn/2019/12/03/go语言学习/index.html">
 <meta property="og:site_name" content="rubb1sh">
-<meta property="og:description" content="指针​        go语言有指针（像c），不过没有指针的运算（防止非法内存访问） 包的初始化​        每个包都有一个可以包含这个初始化函数。这个函数不能被调用。 1func init() &amp;#123; /*...*/ &amp;#125;  作用域作用域和生命周期有所不同。 生命周期是指：一个变量被程序引用的起止时间。 作用域：是指声明的程序出现的区域。（一般描述一个函数或者变量，他是一个编译">
+<meta property="og:description" content="指针​        go语言有指针（像c），不过没有指针的运算（防止非法内存访问） 包的初始化​        每个包都有一个可以包含这个初始化函数。这个函数不能被调用。 1func init() &amp;#123; /*...*/ &amp;#125;  作用域作用域和生命周期有所不同。 生命周期是指：一个变量被程序引用的起止时间。 作用域：是指声明的程序出现的区域。（一般描述一个函数或者变量，他是一个">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-16T16:59:32.283Z">
+<meta property="og:updated_time" content="2020-08-08T12:23:39.428Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="go语言学习">
-<meta name="twitter:description" content="指针​        go语言有指针（像c），不过没有指针的运算（防止非法内存访问） 包的初始化​        每个包都有一个可以包含这个初始化函数。这个函数不能被调用。 1func init() &amp;#123; /*...*/ &amp;#125;  作用域作用域和生命周期有所不同。 生命周期是指：一个变量被程序引用的起止时间。 作用域：是指声明的程序出现的区域。（一般描述一个函数或者变量，他是一个编译">
+<meta name="twitter:description" content="指针​        go语言有指针（像c），不过没有指针的运算（防止非法内存访问） 包的初始化​        每个包都有一个可以包含这个初始化函数。这个函数不能被调用。 1func init() &amp;#123; /*...*/ &amp;#125;  作用域作用域和生命周期有所不同。 生命周期是指：一个变量被程序引用的起止时间。 作用域：是指声明的程序出现的区域。（一般描述一个函数或者变量，他是一个">
 
 
 
@@ -254,7 +254,9 @@
       
 
       
-        <h3 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h3><p>​        go语言有指针（像c），不过没有指针的运算（防止非法内存访问）</p>
+        <a id="more"></a>
+
+<h3 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h3><p>​        go语言有指针（像c），不过没有指针的运算（防止非法内存访问）</p>
 <h3 id="包的初始化"><a href="#包的初始化" class="headerlink" title="包的初始化"></a>包的初始化</h3><p>​        每个包都有一个可以包含这个初始化函数。这个函数不能被调用。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123; <span class="comment">/*...*/</span> &#125;</span><br></pre></td></tr></table></figure>
 
@@ -267,8 +269,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">func f() &#123;&#125;</span><br><span class="line">var g = &quot;g&quot;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	f := &quot;f&quot;</span><br><span class="line">	fmt.Println(f) //go会优先使用main代码块里的f变量，而不是f()</span><br><span class="line">	fmt.Println(p)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h3><p>​        go语言的数据类型：基础类型（basic type）、聚合类型（aggregate type）、引用类型（reference type）、接口类型（interface type）。</p>
-<p>####3.1 整数</p>
-<p>​        go有有符号整数和无符号整数，根据不同的byte又分几种。int8、int16、int32、int64。uint8、uint16、uint32、uint64。</p>
+<h4 id="3-1-整数"><a href="#3-1-整数" class="headerlink" title="3.1 整数"></a>3.1 整数</h4><p>​        go有有符号整数和无符号整数，根据不同的byte又分几种。int8、int16、int32、int64。uint8、uint16、uint32、uint64。</p>
 <h4 id="3-2-浮点数"><a href="#3-2-浮点数" class="headerlink" title="3.2 浮点数"></a>3.2 浮点数</h4><p>​        float32、float64</p>
 <h4 id="3-3-复数"><a href="#3-3-复数" class="headerlink" title="3.3 复数"></a>3.3 复数</h4><p>​        complex64和complex128。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x <span class="keyword">complex128</span> = <span class="built_in">complex</span>(<span class="number">1</span>, <span class="number">2</span>) <span class="comment">// 1+2i</span></span><br><span class="line"><span class="keyword">var</span> y <span class="keyword">complex128</span> = <span class="built_in">complex</span>(<span class="number">3</span>, <span class="number">4</span>) <span class="comment">// 3+4i</span></span><br><span class="line">fmt.Println(x*y) <span class="comment">//(-5+10i)</span></span><br><span class="line">fmt.Println(<span class="built_in">real</span>(x*y)) <span class="comment">// -5</span></span><br><span class="line">fmt.Println(<span class="built_in">imag</span>(x*y)) <span class="comment">// 10</span></span><br></pre></td></tr></table></figure>
@@ -297,8 +298,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/15/java内存模型/" rel="next" title="java内存模型">
-                <i class="fa fa-chevron-left"></i> java内存模型
+              <a href="/2019/10/04/TCP/" rel="next" title="TCP">
+                <i class="fa fa-chevron-left"></i> TCP
               </a>
             
           </div>
@@ -373,7 +374,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-count">12</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -432,7 +433,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#指针"><span class="nav-number">1.</span> <span class="nav-text">指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#包的初始化"><span class="nav-number">2.</span> <span class="nav-text">包的初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#作用域"><span class="nav-number">3.</span> <span class="nav-text">作用域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本数据类型"><span class="nav-number">4.</span> <span class="nav-text">基本数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-浮点数"><span class="nav-number">4.1.</span> <span class="nav-text">3.2 浮点数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-复数"><span class="nav-number">4.2.</span> <span class="nav-text">3.3 复数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-布尔值"><span class="nav-number">4.3.</span> <span class="nav-text">3.4 布尔值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-5-字符串"><span class="nav-number">4.4.</span> <span class="nav-text">3.5 字符串</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Golang-Runtime"><span class="nav-number">5.</span> <span class="nav-text">Golang Runtime</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Goroutine"><span class="nav-number">6.</span> <span class="nav-text">Goroutine</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#指针"><span class="nav-number">1.</span> <span class="nav-text">指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#包的初始化"><span class="nav-number">2.</span> <span class="nav-text">包的初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#作用域"><span class="nav-number">3.</span> <span class="nav-text">作用域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本数据类型"><span class="nav-number">4.</span> <span class="nav-text">基本数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-整数"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 整数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-浮点数"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 浮点数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-复数"><span class="nav-number">4.3.</span> <span class="nav-text">3.3 复数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-布尔值"><span class="nav-number">4.4.</span> <span class="nav-text">3.4 布尔值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-5-字符串"><span class="nav-number">4.5.</span> <span class="nav-text">3.5 字符串</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Golang-Runtime"><span class="nav-number">5.</span> <span class="nav-text">Golang Runtime</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Goroutine"><span class="nav-number">6.</span> <span class="nav-text">Goroutine</span></a></li></ol></div>
             
           </div>
         </section>
