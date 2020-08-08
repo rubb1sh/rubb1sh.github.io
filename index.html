@@ -278,12 +278,26 @@
 
       
         
-          <p>由于defer是在一个函数执行之后，执行defer相关的函数。所以没有特意去考虑过这个先后顺序是那个层面上的先后。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2020/08/08/了解Golang中的defer与return的执行顺序/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
+          
+            <a id="more"></a>
+
+<p>先看这两部分代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">fun1</span><span class="params">()</span> <span class="params">(res <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		res = res + <span class="number">1000</span></span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(fun1())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> go run main.go</span><br><span class="line">1000</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">fun1</span><span class="params">()</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> res <span class="keyword">int</span></span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		res = res + <span class="number">1000</span></span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(fun1())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> go run main.go </span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+
+<p>于是有了疑问，为什么res定义在函数签名中，和定义在函数体中，会有不同？此外，defer和return的执行顺序到底是defer在return前执行，还是在return之后执行？</p>
+<p>于是我打算通过汇编代码，看看go语言翻译成汇编之后，defer和return是谁先执行的，以及为啥return之后打印的值会不同。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go tool compile -l -N -S main.go &gt; obj.out</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/defer%E5%92%8Creturn4.png" alt="1"></p>
+<p>首先，我们通过逐行排查，发现在14行的地方，右边多了一步值拷贝的操作。而这步操作是把值放到了return返回值的地址中，之后，右边又拷贝了一次结果。之后，defer操作的值都是这个拷贝的值，而不是操作返回值。因此，res作为局部变量的时候，defer操作这个局部变量，是不会影响到返回值的。而左边，defer操作的就是返回值地址上的数据，所以最后会打印1000。<br>此外，我们也可以发现，defer是在return之前执行的（runtime.deferprocStack，在RET之前）。</p>
+
+          
         
       
     </div>
