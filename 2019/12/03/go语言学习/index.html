@@ -1,0 +1,555 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0">
+
+
+
+
+
+
+<meta name="description" content="指针​        go语言有指针（像c），不过没有指针的运算（防止非法内存访问） 包的初始化​        每个包都有一个可以包含这个初始化函数。这个函数不能被调用。 1func init() &amp;#123; /*...*/ &amp;#125;  作用域作用域和生命周期有所不同。 生命周期是指：一个变量被程序引用的起止时间。 作用域：是指声明的程序出现的区域。（一般描述一个函数或者变量，他是一个编译">
+<meta property="og:type" content="article">
+<meta property="og:title" content="go语言学习">
+<meta property="og:url" content="http://rubb1sh.cn/2019/12/03/go语言学习/index.html">
+<meta property="og:site_name" content="rubb1sh">
+<meta property="og:description" content="指针​        go语言有指针（像c），不过没有指针的运算（防止非法内存访问） 包的初始化​        每个包都有一个可以包含这个初始化函数。这个函数不能被调用。 1func init() &amp;#123; /*...*/ &amp;#125;  作用域作用域和生命周期有所不同。 生命周期是指：一个变量被程序引用的起止时间。 作用域：是指声明的程序出现的区域。（一般描述一个函数或者变量，他是一个编译">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-12-16T16:59:32.283Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="go语言学习">
+<meta name="twitter:description" content="指针​        go语言有指针（像c），不过没有指针的运算（防止非法内存访问） 包的初始化​        每个包都有一个可以包含这个初始化函数。这个函数不能被调用。 1func init() &amp;#123; /*...*/ &amp;#125;  作用域作用域和生命周期有所不同。 生命周期是指：一个变量被程序引用的起止时间。 作用域：是指声明的程序出现的区域。（一般描述一个函数或者变量，他是一个编译">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"hide"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> go语言学习 | rubb1sh </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">rubb1sh</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">个人技术博客</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                go语言学习
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-12-03T20:14:55+08:00" content="2019-12-03">
+              2019-12-03
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h3><p>​        go语言有指针（像c），不过没有指针的运算（防止非法内存访问）</p>
+<h3 id="包的初始化"><a href="#包的初始化" class="headerlink" title="包的初始化"></a>包的初始化</h3><p>​        每个包都有一个可以包含这个初始化函数。这个函数不能被调用。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123; <span class="comment">/*...*/</span> &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h3><p>作用域和生命周期有所不同。</p>
+<p>生命周期是指：一个变量被程序引用的起止时间。</p>
+<p>作用域：是指声明的程序出现的区域。（一般描述一个函数或者变量，他是一个编译时期的属性）</p>
+<p>首先，了解作用域之前，需要明白语法块（block）是由大括号围起来的一个语句序列，比如一个循环体、一个函数。</p>
+<p>因此，block内部声明的变量对外部是不可见的。</p>
+<p>此外，一个没有显示包含大括号{}的声明代码，我们称为“词法块“。所以，每个block，我们都可以看成是一个“词法块”。而全部的源码的词法块，我们称为“全剧块”。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">func f() &#123;&#125;</span><br><span class="line">var g = &quot;g&quot;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	f := &quot;f&quot;</span><br><span class="line">	fmt.Println(f) //go会优先使用main代码块里的f变量，而不是f()</span><br><span class="line">	fmt.Println(p)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h3><p>​        go语言的数据类型：基础类型（basic type）、聚合类型（aggregate type）、引用类型（reference type）、接口类型（interface type）。</p>
+<p>####3.1 整数</p>
+<p>​        go有有符号整数和无符号整数，根据不同的byte又分几种。int8、int16、int32、int64。uint8、uint16、uint32、uint64。</p>
+<h4 id="3-2-浮点数"><a href="#3-2-浮点数" class="headerlink" title="3.2 浮点数"></a>3.2 浮点数</h4><p>​        float32、float64</p>
+<h4 id="3-3-复数"><a href="#3-3-复数" class="headerlink" title="3.3 复数"></a>3.3 复数</h4><p>​        complex64和complex128。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x <span class="keyword">complex128</span> = <span class="built_in">complex</span>(<span class="number">1</span>, <span class="number">2</span>) <span class="comment">// 1+2i</span></span><br><span class="line"><span class="keyword">var</span> y <span class="keyword">complex128</span> = <span class="built_in">complex</span>(<span class="number">3</span>, <span class="number">4</span>) <span class="comment">// 3+4i</span></span><br><span class="line">fmt.Println(x*y) <span class="comment">//(-5+10i)</span></span><br><span class="line">fmt.Println(<span class="built_in">real</span>(x*y)) <span class="comment">// -5</span></span><br><span class="line">fmt.Println(<span class="built_in">imag</span>(x*y)) <span class="comment">// 10</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-4-布尔值"><a href="#3-4-布尔值" class="headerlink" title="3.4 布尔值"></a>3.4 布尔值</h4><h4 id="3-5-字符串"><a href="#3-5-字符串" class="headerlink" title="3.5 字符串"></a>3.5 字符串</h4><h3 id="Golang-Runtime"><a href="#Golang-Runtime" class="headerlink" title="Golang Runtime"></a>Golang Runtime</h3><p>​        学习一门语言，往往让我比较痴迷或者感兴趣的点其实是这门语言的优势，但是优势底线肯定是语言设计者的哲学所在，通过了解语言的底层实现和设计者的想法，会让我忍不住惊叹设计者的想法是多么的有趣。而golang显然是一门让我觉得足够优秀，包括它的哲学而简洁，以及对并发天生的支持。</p>
+<h3 id="Goroutine"><a href="#Goroutine" class="headerlink" title="Goroutine"></a>Goroutine</h3><p>​        </p>
+<p>参考链接：</p>
+<p><a href="https://johng.cn/goroutine1-pmg/" target="_blank" rel="noopener">https://johng.cn/goroutine1-pmg/</a></p>
+<p><a href="http://morsmachine.dk/go-scheduler" target="_blank" rel="noopener">http://morsmachine.dk/go-scheduler</a></p>
+<p><a href="https://www.zhihu.com/question/20862617" target="_blank" rel="noopener">https://www.zhihu.com/question/20862617</a></p>
+<p>​    </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/15/java内存模型/" rel="next" title="java内存模型">
+                <i class="fa fa-chevron-left"></i> java内存模型
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/08/08/了解Golang中的defer与return的执行顺序/" rel="prev" title="了解Golang中的defer与return的执行顺序">
+                了解Golang中的defer与return的执行顺序 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="https://avatars3.githubusercontent.com/u/22258742?s=460&v=4" alt="rubb1sh">
+          <p class="site-author-name" itemprop="name">rubb1sh</p>
+          <p class="site-description motion-element" itemprop="description">用于记录个人日常打代码遇到的技术问题</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/rubb1sh" target="_blank">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#指针"><span class="nav-number">1.</span> <span class="nav-text">指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#包的初始化"><span class="nav-number">2.</span> <span class="nav-text">包的初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#作用域"><span class="nav-number">3.</span> <span class="nav-text">作用域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本数据类型"><span class="nav-number">4.</span> <span class="nav-text">基本数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-浮点数"><span class="nav-number">4.1.</span> <span class="nav-text">3.2 浮点数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-复数"><span class="nav-number">4.2.</span> <span class="nav-text">3.3 复数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-布尔值"><span class="nav-number">4.3.</span> <span class="nav-text">3.4 布尔值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-5-字符串"><span class="nav-number">4.4.</span> <span class="nav-text">3.5 字符串</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Golang-Runtime"><span class="nav-number">5.</span> <span class="nav-text">Golang Runtime</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Goroutine"><span class="nav-number">6.</span> <span class="nav-text">Goroutine</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2019 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">rubb1sh</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=0.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

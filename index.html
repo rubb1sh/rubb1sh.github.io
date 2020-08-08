@@ -217,6 +217,741 @@
             
               
                 
+                <a class="post-title-link" href="/2020/08/08/了解Golang中的defer与return的执行顺序/" itemprop="url">
+                  了解Golang中的defer与return的执行顺序
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2020-08-08T12:26:04+08:00" content="2020-08-08">
+              2020-08-08
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/go/" itemprop="url" rel="index">
+                    <span itemprop="name">go</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>由于defer是在一个函数执行之后，执行defer相关的函数。所以没有特意去考虑过这个先后顺序是那个层面上的先后。<br>先看这两部分代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">fun1</span><span class="params">()</span> <span class="params">(res <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		res = res + <span class="number">1000</span></span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(fun1())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> go run main.go                                                                                                                                                                                              1000</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">fun1</span><span class="params">()</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> res <span class="keyword">int</span></span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		res = res + <span class="number">1000</span></span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(fun1())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> go run main.go </span></span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+
+<p>但是，测试这两部分代码，没办法解释defer是return之后执行的。</p>
+<p>首先，我们定义一下：先后顺序是go编译成机器码之后，机器码执行的先后。（因为汇编码是顺序执行的，所以这个先后可以被严格定义）<br>有了这个定义之后，我们就可以说，在机器码中，在前面的先执行。那么接下来就是分析，golang的汇编代码。</p>
+<p>通过这个指令，输出go文件的汇编代码，然后我们在obj.out中进行比对。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go tool compile -l -N -S main.go &gt; obj.out</span><br></pre></td></tr></table></figure>
+
+<p><img src="%E4%BA%86%E8%A7%A3Golang%E4%B8%AD%E7%9A%84defer%E4%B8%8Ereturn%E7%9A%84%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F1.png" alt="1"></p>
+<p>汇编代码不一定能完全看得懂，不过通过这个地方我们发现，res作为局部变量申明的时候，会拷贝一份新的值。</p>
+<p><img src="defer%E5%92%8Creturn2.png" alt="2"></p>
+<p>看后面的汇编代码也能发现，defer是对这个新值拷贝的值进行操作，而不是对返回进行操作。<br>而对于res在形参中就申明的情况，defer是直接对返回值存放地址上的值进行操作，而没有进行拷贝。</p>
+<p><img src="defer%E5%92%8Creturn3.png" alt="3"></p>
+<p>并且通过汇编代码，可以看出，确实是defer先执行，再执行return的。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2019/12/03/go语言学习/" itemprop="url">
+                  go语言学习
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-12-03T20:14:55+08:00" content="2019-12-03">
+              2019-12-03
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h3><p>​        go语言有指针（像c），不过没有指针的运算（防止非法内存访问）</p>
+<h3 id="包的初始化"><a href="#包的初始化" class="headerlink" title="包的初始化"></a>包的初始化</h3><p>​        每个包都有一个可以包含这个初始化函数。这个函数不能被调用。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123; <span class="comment">/*...*/</span> &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h3><p>作用域和生命周期有所不同。</p>
+<p>生命周期是指：一个变量被程序引用的起止时间。</p>
+<p>作用域：是指声明的程序出现的区域。（一般描述一个函数或者变量，他是一个编译时期的属性）</p>
+<p>首先，了解作用域之前，需要明白语法块（block）是由大括号围起来的一个语句序列，比如一个循环体、一个函数。</p>
+<p>因此，block内部声明的变量对外部是不可见的。</p>
+<p>此外，一个没有显示包含大括号{}的声明代码，我们称为“词法块“。所以，每个block，我们都可以看成是一个“词法块”。而全部的源码的词法块，我们称为“全剧块”。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">func f() &#123;&#125;</span><br><span class="line">var g = &quot;g&quot;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	f := &quot;f&quot;</span><br><span class="line">	fmt.Println(f) //go会优先使用main代码块里的f变量，而不是f()</span><br><span class="line">	fmt.Println(p)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h3><p>​        go语言的数据类型：基础类型（basic type）、聚合类型（aggregate type）、引用类型（reference type）、接口类型（interface type）。</p>
+<p>####3.1 整数</p>
+<p>​        go有有符号整数和无符号整数，根据不同的byte又分几种。int8、int16、int32、int64。uint8、uint16、uint32、uint64。</p>
+<h4 id="3-2-浮点数"><a href="#3-2-浮点数" class="headerlink" title="3.2 浮点数"></a>3.2 浮点数</h4><p>​        float32、float64</p>
+<h4 id="3-3-复数"><a href="#3-3-复数" class="headerlink" title="3.3 复数"></a>3.3 复数</h4><p>​        complex64和complex128。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x <span class="keyword">complex128</span> = <span class="built_in">complex</span>(<span class="number">1</span>, <span class="number">2</span>) <span class="comment">// 1+2i</span></span><br><span class="line"><span class="keyword">var</span> y <span class="keyword">complex128</span> = <span class="built_in">complex</span>(<span class="number">3</span>, <span class="number">4</span>) <span class="comment">// 3+4i</span></span><br><span class="line">fmt.Println(x*y) <span class="comment">//(-5+10i)</span></span><br><span class="line">fmt.Println(<span class="built_in">real</span>(x*y)) <span class="comment">// -5</span></span><br><span class="line">fmt.Println(<span class="built_in">imag</span>(x*y)) <span class="comment">// 10</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-4-布尔值"><a href="#3-4-布尔值" class="headerlink" title="3.4 布尔值"></a>3.4 布尔值</h4><h4 id="3-5-字符串"><a href="#3-5-字符串" class="headerlink" title="3.5 字符串"></a>3.5 字符串</h4><h3 id="Golang-Runtime"><a href="#Golang-Runtime" class="headerlink" title="Golang Runtime"></a>Golang Runtime</h3><p>​        学习一门语言，往往让我比较痴迷或者感兴趣的点其实是这门语言的优势，但是优势底线肯定是语言设计者的哲学所在，通过了解语言的底层实现和设计者的想法，会让我忍不住惊叹设计者的想法是多么的有趣。而golang显然是一门让我觉得足够优秀，包括它的哲学而简洁，以及对并发天生的支持。</p>
+<h3 id="Goroutine"><a href="#Goroutine" class="headerlink" title="Goroutine"></a>Goroutine</h3><p>​        </p>
+<p>参考链接：</p>
+<p><a href="https://johng.cn/goroutine1-pmg/" target="_blank" rel="noopener">https://johng.cn/goroutine1-pmg/</a></p>
+<p><a href="http://morsmachine.dk/go-scheduler" target="_blank" rel="noopener">http://morsmachine.dk/go-scheduler</a></p>
+<p><a href="https://www.zhihu.com/question/20862617" target="_blank" rel="noopener">https://www.zhihu.com/question/20862617</a></p>
+<p>​    </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2019/10/15/java内存模型/" itemprop="url">
+                  java内存模型
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-10-15T00:12:44+08:00" content="2019-10-15">
+              2019-10-15
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>​        由于计算机的存储设备与处理器的运算速度有很大的差距。因此，在处理器和内存之间，加入了一层读写速度更快的高速缓存（Cache）。</p>
+<p>​        引入了Cache很好的解决了处理器与内存的速度问题。但是，同时又加入了新的问题——缓存一致性（Cache Coherence）。每个处理器有自己的Cache，但是同时又共享同一主内存（Main Memory）。</p>
+<p>​        除了增加高速缓存之外，</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2019/10/04/TCP/" itemprop="url">
+                  TCP
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-10-04T14:10:15+08:00" content="2019-10-04">
+              2019-10-04
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="流量控制"><a href="#流量控制" class="headerlink" title="流量控制"></a>流量控制</h3><p>​        流量控制是为了消除发送方使接收方缓存溢出的可能性，因此流量控制是一个<strong>速度匹配服务</strong>。</p>
+<h4 id="1-滑动窗口"><a href="#1-滑动窗口" class="headerlink" title="1. 滑动窗口"></a>1. 滑动窗口</h4><p>​        为了提高信道的利用率，TCP协议使用连续<strong>ARQ协议</strong>，而不是停止等待协议。就是，一次传多个分组，然后<strong>等待确认</strong>，而不是发送一个分组，就等待确认。</p>
+<p>​        TCP通过给发送方维护一个<strong>接收窗口</strong>的变量来控制流量。但是，因为TCP是<strong>全双工通信</strong>。因此，在连接两端的发送方都各自维护一个<strong>接收窗口</strong>。        </p>
+<h4 id="2-回退N步"><a href="#2-回退N步" class="headerlink" title="2. 回退N步"></a>2. 回退N步</h4><p>​        GBN协议会丢弃所有失序的分组。</p>
+<h4 id="2-选择重传"><a href="#2-选择重传" class="headerlink" title="2. 选择重传"></a>2. 选择重传</h4><p>​        优化GBN协议，避免回退N步重传，只重传丢失的分组。在分组交付给应用层之前，接收方需要确保窗口内的分组都接受到。如果对于一次失序的分组到达，会先放在缓存中，等待窗口内的分组都到达，例如对于一个4-8的窗口，6-8先到了，会放在缓存中等待，直到4到了，才将这个窗口的分组一并交付给上层。接收方接收到了6-8的分组。也会给发送方发送ACK。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2019/09/15/mysql数据库知识点/" itemprop="url">
+                  mysql数据库知识点
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-09-15T13:00:47+08:00" content="2019-09-15">
+              2019-09-15
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="1-事务"><a href="#1-事务" class="headerlink" title="1. 事务"></a>1. 事务</h3><p>​        一个事务由多个sql语句组成的时候。希望这个事务是完整的（要么全部执行，要么全部不执行）。</p>
+<h4 id="开始一个事务"><a href="#开始一个事务" class="headerlink" title="开始一个事务"></a>开始一个事务</h4><ul>
+<li>BEGIN、start transaction开始一个事务。</li>
+<li>COMMIT提交事务。</li>
+<li>rollback回滚。</li>
+</ul>
+<h4 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h4><ol>
+<li>读未提交。事务可以读到一个事务未提交的数据（脏读）。</li>
+<li>读提交。事务不会读到未提交的数据。但是，对于自身，一个事务两次查询会发现查询的结果不一样。因为你可能第一次查询，另一个事务没有提交，再查询的时候，发现事务已经提交。那么就会发现两次查询结果不同。但是对于你，你不希望自己这个事务未提交的时候，发送两次读取数据不一样，这种问题就叫做不可重复读。你不能重复读取。</li>
+<li>可重复读。重复读不会读到另一个事务提交的数据。但是幻读的情况还在。例如：一个事务有一个select和一个update。当事务执行select，发现得到的是7条数据。update的时候却更新了8条数据。就是可能在你事务执行的时候，另一个事务进行了insert操作。你的select由于开启了可重复读，不会读到另一个事务提交的数据。但是update操作却会操作到这个你没读到的数据。</li>
+<li>串行化。事务顺序执行。加锁。其他事务不能执行。导致并发性能差。</li>
+</ol>
+<p>​        </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2019/09/11/并发编程概念/" itemprop="url">
+                  并发编程概念
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-09-11T18:16:36+08:00" content="2019-09-11">
+              2019-09-11
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="strace"><a href="#strace" class="headerlink" title="strace"></a>strace</h4><p>​    跟踪一个进程的系统调用</p>
+<h4 id="lsof"><a href="#lsof" class="headerlink" title="lsof"></a>lsof</h4><p>​    列出所有打开的文件。list open file</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2019/08/25/双亲委派模型的破坏/" itemprop="url">
+                  双亲委派模型的破坏
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-08-25T01:37:08+08:00" content="2019-08-25">
+              2019-08-25
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/类加载器/" itemprop="url" rel="index">
+                    <span itemprop="name">类加载器</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2019/08/24/java类加载器实战/" itemprop="url">
                   java类加载器实战
                 </a>
@@ -540,679 +1275,13 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2019/08/09/JVM垃圾回收算法/" itemprop="url">
-                  JVM垃圾回收算法
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2019-08-09T19:22:56+08:00" content="2019-08-09">
-              2019-08-09
-            </time>
-          </span>
-
-          
-            <span class="post-category">
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/java/jvm/" itemprop="url" rel="index">
-                    <span itemprop="name">jvm</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="JVM垃圾回收机制"><a href="#JVM垃圾回收机制" class="headerlink" title="JVM垃圾回收机制"></a>JVM垃圾回收机制</h3><p>​        jvm垃圾回收机制看《jvm入门》就了解过，加上这部分内容不难，自己列一下要记的东西，准备面试就行。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2019/08/09/JVM垃圾回收算法/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2019/08/09/mysql在mac下的配置/" itemprop="url">
-                  mysql在mac下的配置
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2019-08-09T17:24:16+08:00" content="2019-08-09">
-              2019-08-09
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2019/08/08/JVM类加载七个阶段/" itemprop="url">
-                  JVM类加载七个阶段
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2019-08-08T00:13:15+08:00" content="2019-08-08">
-              2019-08-08
-            </time>
-          </span>
-
-          
-            <span class="post-category">
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/java/jvm/" itemprop="url" rel="index">
-                    <span itemprop="name">jvm</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="七个过程"><a href="#七个过程" class="headerlink" title="七个过程"></a>七个过程</h3><p>​        加载、验证、准备、解析、初始化、使用、卸载，其中的<strong>初始化</strong>和<strong>准备</strong>是重点。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2019/08/08/JVM类加载七个阶段/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2019/08/03/HTTP协议/" itemprop="url">
-                  HTTP协议
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2019-08-03T18:22:18+08:00" content="2019-08-03">
-              2019-08-03
-            </time>
-          </span>
-
-          
-            <span class="post-category">
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/计算机网络/" itemprop="url" rel="index">
-                    <span itemprop="name">计算机网络</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/计算机网络/http/" itemprop="url" rel="index">
-                    <span itemprop="name">http</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="HTTP特性"><a href="#HTTP特性" class="headerlink" title="HTTP特性"></a>HTTP特性</h3><ol>
-<li>http协议是构建在tcp/ip协议之上的，一个<strong>应用层</strong>协议，默认端口号为80、8080</li>
-<li>http是<strong>无连接无状态</strong>的</li>
-</ol>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2019/08/03/HTTP协议/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2019/08/02/jvm规范内存管理原则/" itemprop="url">
-                  jvm规范内存管理原则
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2019-08-02T22:41:24+08:00" content="2019-08-02">
-              2019-08-02
-            </time>
-          </span>
-
-          
-            <span class="post-category">
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/java/jvm/" itemprop="url" rel="index">
-                    <span itemprop="name">jvm</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="1-运行时数据区"><a href="#1-运行时数据区" class="headerlink" title="1. 运行时数据区"></a>1. 运行时数据区</h3><p>​        JVM运行时数据区由5部分组成，分别是程序计数器、虚拟机栈、本地方法栈、堆、方法区。这个是由《Java虚拟机规范》所指定的。每个区域有各自的用途。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2019/08/02/jvm规范内存管理原则/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2019/08/02/hello-world/" itemprop="url">
-                  Hello World
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2019-08-02T17:45:12+08:00" content="2019-08-02">
-              2019-08-02
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2019/08/02/hello-world/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -1249,7 +1318,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-count">16</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1257,7 +1326,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -1266,7 +1335,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -1315,8 +1384,8 @@
       <div class="footer-inner">
         <div class="copyright">
   
-  &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  &copy;  2019 - 
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
