@@ -65,14 +65,14 @@
 <meta property="og:site_name" content="rubb1sh">
 <meta property="og:description" content="由于defer是在一个函数执行之后，执行defer相关的函数。所以没有特意去考虑过这个先后顺序是那个层面上的先后。先看这两部分代码： 1234567891011121314package mainimport &quot;fmt&quot;func fun1() (res int) &amp;#123;	defer func() &amp;#123;		res = res + 1000	&amp;#125;()	return res&amp;#12">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://rubb1sh.cn/2020/08/08/了解Golang中的defer与return的执行顺序/%E4%BA%86%E8%A7%A3Golang%E4%B8%AD%E7%9A%84defer%E4%B8%8Ereturn%E7%9A%84%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F1.png">
-<meta property="og:image" content="http://rubb1sh.cn/2020/08/08/了解Golang中的defer与return的执行顺序/defer%E5%92%8Creturn2.png">
-<meta property="og:image" content="http://rubb1sh.cn/2020/08/08/了解Golang中的defer与return的执行顺序/defer%E5%92%8Creturn3.png">
-<meta property="og:updated_time" content="2020-08-08T05:20:35.665Z">
+<meta property="og:image" content="http://rubb1sh.cn/images/%E4%BA%86%E8%A7%A3Golang%E4%B8%AD%E7%9A%84defer%E4%B8%8Ereturn%E7%9A%84%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F1.png">
+<meta property="og:image" content="http://rubb1sh.cn/images/defer%E5%92%8Creturn2.png">
+<meta property="og:image" content="http://rubb1sh.cn/images/defer%E5%92%8Creturn3.png">
+<meta property="og:updated_time" content="2020-08-08T05:48:44.387Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="了解Golang中的defer与return的执行顺序">
 <meta name="twitter:description" content="由于defer是在一个函数执行之后，执行defer相关的函数。所以没有特意去考虑过这个先后顺序是那个层面上的先后。先看这两部分代码： 1234567891011121314package mainimport &quot;fmt&quot;func fun1() (res int) &amp;#123;	defer func() &amp;#123;		res = res + 1000	&amp;#125;()	return res&amp;#12">
-<meta name="twitter:image" content="http://rubb1sh.cn/2020/08/08/了解Golang中的defer与return的执行顺序/%E4%BA%86%E8%A7%A3Golang%E4%B8%AD%E7%9A%84defer%E4%B8%8Ereturn%E7%9A%84%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F1.png">
+<meta name="twitter:image" content="http://rubb1sh.cn/images/%E4%BA%86%E8%A7%A3Golang%E4%B8%AD%E7%9A%84defer%E4%B8%8Ereturn%E7%9A%84%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F1.png">
 
 
 
@@ -292,11 +292,11 @@
 <p>通过这个指令，输出go文件的汇编代码，然后我们在obj.out中进行比对。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go tool compile -l -N -S main.go &gt; obj.out</span><br></pre></td></tr></table></figure>
 
-<p><img src="%E4%BA%86%E8%A7%A3Golang%E4%B8%AD%E7%9A%84defer%E4%B8%8Ereturn%E7%9A%84%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F1.png" alt="1"></p>
+<p><img src="/images/%E4%BA%86%E8%A7%A3Golang%E4%B8%AD%E7%9A%84defer%E4%B8%8Ereturn%E7%9A%84%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F1.png" alt="1"></p>
 <p>汇编代码不一定能完全看得懂，不过通过这个地方我们发现，res作为局部变量申明的时候，会拷贝一份新的值。</p>
-<p><img src="defer%E5%92%8Creturn2.png" alt="2"></p>
+<p><img src="/images/defer%E5%92%8Creturn2.png" alt="2"></p>
 <p>看后面的汇编代码也能发现，defer是对这个新值拷贝的值进行操作，而不是对返回进行操作。<br>而对于res在形参中就申明的情况，defer是直接对返回值存放地址上的值进行操作，而没有进行拷贝。</p>
-<p><img src="defer%E5%92%8Creturn3.png" alt="3"></p>
+<p><img src="/images/defer%E5%92%8Creturn3.png" alt="3"></p>
 <p>并且通过汇编代码，可以看出，确实是defer先执行，再执行return的。</p>
 
       
