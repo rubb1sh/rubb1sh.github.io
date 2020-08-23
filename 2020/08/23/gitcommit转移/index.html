@@ -41,7 +41,7 @@
 <link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="git,">
 
 
 
@@ -57,16 +57,18 @@
 
 
 
-<meta name="description" content="用于记录个人日常打代码遇到的技术问题">
-<meta property="og:type" content="website">
-<meta property="og:title" content="rubb1sh">
-<meta property="og:url" content="http://rubb1sh.cn/categories/计算机网络/index.html">
+<meta name="description" content="当同时开发两个branch，本来想在featureA分支，却在featureB分支上开发了，并完成了commit。这时，想把在featureB的这次commit转移到featureA上，可以使用git的cherry-pick。cherry-pick可以把在另外的branch的某次提交转移到当前的branch上。">
+<meta name="keywords" content="git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gitcommit转移">
+<meta property="og:url" content="http://rubb1sh.cn/2020/08/23/gitcommit转移/index.html">
 <meta property="og:site_name" content="rubb1sh">
-<meta property="og:description" content="用于记录个人日常打代码遇到的技术问题">
+<meta property="og:description" content="当同时开发两个branch，本来想在featureA分支，却在featureB分支上开发了，并完成了commit。这时，想把在featureB的这次commit转移到featureA上，可以使用git的cherry-pick。cherry-pick可以把在另外的branch的某次提交转移到当前的branch上。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-08-23T05:27:14.788Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="rubb1sh">
-<meta name="twitter:description" content="用于记录个人日常打代码遇到的技术问题">
+<meta name="twitter:title" content="gitcommit转移">
+<meta name="twitter:description" content="当同时开发两个branch，本来想在featureA分支，却在featureB分支上开发了，并完成了commit。这时，想把在featureB的这次commit转移到featureA上，可以使用git的cherry-pick。cherry-pick可以把在另外的branch的某次提交转移到当前的branch上。">
 
 
 
@@ -84,7 +86,7 @@
   };
 </script>
 
-  <title> 分类: 计算机网络 | rubb1sh </title>
+  <title> gitcommit转移 | rubb1sh </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -105,7 +107,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-right  ">
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -193,45 +195,151 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2>
-        计算机网络
-        <small>分类</small>
-      </h2>
-    </div>
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                gitcommit转移
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2020-08-23T13:26:20+08:00" content="2020-08-23">
+              2020-08-23
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/git/" itemprop="url" rel="index">
+                    <span itemprop="name">git</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
       
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+      
+        <p>当同时开发两个branch，本来想在featureA分支，却在featureB分支上开发了，并完成了commit。这时，想把在featureB的这次commit转移到featureA上，可以使用git的cherry-pick。cherry-pick可以把在另外的branch的某次提交转移到当前的branch上。</p>
+<a id="more"></a>
 
-      <h1 class="post-title">
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git cherry-pick &lt;commitHash&gt;</span><br></pre></td></tr></table></figure>
+
+<p><commithash>为你要转移的commit哈希号（哈希号可以通过git log查看，不用完整的哈希号，取前几个就好了）<br>如果需要获取的commit是另一个branch的最后commit，可以使用一下命令，而无需commitHash。</commithash></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git cherry-pick featureB</span><br></pre></td></tr></table></figure>
+
+<h3 id="转移多个分支"><a href="#转移多个分支" class="headerlink" title="转移多个分支"></a>转移多个分支</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git cherry-pick &lt;HashA&gt; &lt;HashB&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ol>
+<li>使用cherry-pick转移分支后需要处理merge的冲突。</li>
+<li>命令默认commit，同时使用转移的commit的提交信息。</li>
+</ol>
+<h3 id="其他选项"><a href="#其他选项" class="headerlink" title="其他选项"></a>其他选项</h3><ul>
+<li>如果想编辑提交记录，使用-e</li>
+<li>如果只更新工作区（git add），而不commit，使用-n，–no-commit</li>
+<li>冲突后，使用git cherry-pick –continue，完成后续分支转移</li>
+<li>–abort放弃git cherry-pick操作（和git merge的操作类似）</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
         
-            <a class="post-title-link" href="/2019/08/03/HTTP协议/" itemprop="url">
-              
-                <span itemprop="name">HTTP协议</span>
-              
-            </a>
-        
-      </h1>
+      
+    </div>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-08-03T18:22:18+08:00" content="2019-08-03">
-          08-03
-        </time>
-      </div>
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/git/" rel="tag">#git</a>
+          
+        </div>
+      
 
-    </header>
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/08/了解Golang中的defer与return的执行顺序/" rel="next" title="了解Golang中的defer与return的执行顺序">
+                <i class="fa fa-chevron-left"></i> 了解Golang中的defer与return的执行顺序
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </article>
 
 
-    
-  </section>
 
-  
-
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -239,6 +347,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -258,8 +370,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image" src="https://avatars3.githubusercontent.com/u/22258742?s=460&v=4" alt="rubb1sh">
           <p class="site-author-name" itemprop="name">rubb1sh</p>
@@ -320,6 +441,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#转移多个分支"><span class="nav-number">1.</span> <span class="nav-text">转移多个分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意事项"><span class="nav-number">2.</span> <span class="nav-text">注意事项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他选项"><span class="nav-number">3.</span> <span class="nav-text">其他选项</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -404,6 +536,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=0.5.0"></script>
+
+
 
   
 
