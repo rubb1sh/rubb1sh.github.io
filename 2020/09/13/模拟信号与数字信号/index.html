@@ -41,7 +41,7 @@
 <link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="notes,daily,">
+  <meta name="keywords" content="daily,notes,">
 
 
 
@@ -58,7 +58,7 @@
 
 
 <meta name="description" content="前言分布式系统中面向流的通信部分讲到模拟信号和数字信号的转换，自己对模拟信号和数字信号进行了了解，并记录下来。">
-<meta name="keywords" content="notes,daily">
+<meta name="keywords" content="daily,notes">
 <meta property="og:type" content="article">
 <meta property="og:title" content="模拟信号与数字信号">
 <meta property="og:url" content="http://rubb1sh.cn/2020/09/13/模拟信号与数字信号/index.html">
@@ -68,7 +68,7 @@
 <meta property="og:image" content="http://rubb1sh.cn/images/%E6%A8%A1%E6%8B%9F%E4%BF%A1%E5%8F%B7.jpg">
 <meta property="og:image" content="http://rubb1sh.cn/images/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7.jpg">
 <meta property="og:image" content="http://rubb1sh.cn/images/%E6%A8%A1%E6%8B%9F%E4%BF%A1%E5%8F%B7%E8%BD%AC%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7.jpg">
-<meta property="og:updated_time" content="2020-09-13T09:20:12.852Z">
+<meta property="og:updated_time" content="2020-09-13T09:23:13.824Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="模拟信号与数字信号">
 <meta name="twitter:description" content="前言分布式系统中面向流的通信部分讲到模拟信号和数字信号的转换，自己对模拟信号和数字信号进行了了解，并记录下来。">
@@ -278,10 +278,12 @@
       
 
       
-        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><pre><code>分布式系统中面向流的通信部分讲到模拟信号和数字信号的转换，自己对模拟信号和数字信号进行了了解，并记录下来。</code></pre><a id="more"></a>
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>分布式系统中面向流的通信部分讲到模拟信号和数字信号的转换，自己对模拟信号和数字信号进行了了解，并记录下来。</p>
+<a id="more"></a>
 
-<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><pre><code>PCM脉冲编码调制（Pulse Code Modulation）是将时间连续的模拟信号，转换成时间离散的数字信号。因为在计算机网络中，数据会被表示为0和1，因此，为了视频数据能被发送，需要对模拟信号转换成01的数字信号。此外，模拟信号的抗干扰能力较弱，远不如数字信号。</code></pre><p><img src="/images/%E6%A8%A1%E6%8B%9F%E4%BF%A1%E5%8F%B7.jpg" alt="模拟信号"><br><img src="/images/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7.jpg" alt="数字信号"></p>
-<h3 id="模拟信号转数字信号"><a href="#模拟信号转数字信号" class="headerlink" title="模拟信号转数字信号"></a>模拟信号转数字信号</h3><pre><code>模拟信号转数字信号主要分为3个阶段，分别是取样、量化、编码。</code></pre><p><img src="/images/%E6%A8%A1%E6%8B%9F%E4%BF%A1%E5%8F%B7%E8%BD%AC%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7.jpg" alt="模拟信号转数字信号"></p>
+<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>PCM脉冲编码调制（Pulse Code Modulation）是将时间连续的模拟信号，转换成时间离散的数字信号。因为在计算机网络中，数据会被表示为0和1，因此，为了视频数据能被发送，需要对模拟信号转换成01的数字信号。此外，模拟信号的抗干扰能力较弱，远不如数字信号。</p>
+<p><img src="/images/%E6%A8%A1%E6%8B%9F%E4%BF%A1%E5%8F%B7.jpg" alt="模拟信号"><br><img src="/images/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7.jpg" alt="数字信号"></p>
+<h3 id="模拟信号转数字信号"><a href="#模拟信号转数字信号" class="headerlink" title="模拟信号转数字信号"></a>模拟信号转数字信号</h3><p>模拟信号转数字信号主要分为3个阶段，分别是取样、量化、编码。<br><img src="/images/%E6%A8%A1%E6%8B%9F%E4%BF%A1%E5%8F%B7%E8%BD%AC%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7.jpg" alt="模拟信号转数字信号"></p>
 <ol>
 <li>第一阶段取样会对模拟信号进行按照时间轴进行均分成各个块。</li>
 <li>第二阶段量化对每个块中，模拟信号的值进行表示。一般是进行二进制表示。这样每个块中的模拟信号就会被近似成一个值，而不是一条曲线（由线性变成了离散数值）。</li>
@@ -302,9 +304,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/notes/" rel="tag">#notes</a>
-          
             <a href="/tags/daily/" rel="tag">#daily</a>
+          
+            <a href="/tags/notes/" rel="tag">#notes</a>
           
         </div>
       
