@@ -41,7 +41,7 @@
 <link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="go,源码,">
+  <meta name="keywords" content="git,daily,">
 
 
 
@@ -57,20 +57,18 @@
 
 
 
-<meta name="description" content="先看这两部分代码： 1234567891011121314package mainimport &quot;fmt&quot;func fun1() (res int) &amp;#123;	defer func() &amp;#123;		res = res + 1000	&amp;#125;()	return res&amp;#125;func main() &amp;#123;	fmt.Println(fun1())&amp;#125;  12$">
-<meta name="keywords" content="go,源码">
+<meta name="description" content="当同时开发两个branch，本来想在featureA分支，却在featureB分支上开发了，并完成了commit。这时，想把在featureB的这次commit转移到featureA上，可以使用git的cherry-pick。cherry-pick可以把在另外的branch的某次提交转移到当前的branch上。">
+<meta name="keywords" content="git,daily">
 <meta property="og:type" content="article">
-<meta property="og:title" content="了解Golang中的defer与return的执行顺序">
-<meta property="og:url" content="http://rubb1sh.cn/2020/08/08/了解Golang中的defer与return的执行顺序/index.html">
+<meta property="og:title" content="每日一记 20200822">
+<meta property="og:url" content="http://rubb1sh.cn/2020/08/22/每日一记-20200822 (copy)/index.html">
 <meta property="og:site_name" content="rubb1sh">
-<meta property="og:description" content="先看这两部分代码： 1234567891011121314package mainimport &quot;fmt&quot;func fun1() (res int) &amp;#123;	defer func() &amp;#123;		res = res + 1000	&amp;#125;()	return res&amp;#125;func main() &amp;#123;	fmt.Println(fun1())&amp;#125;  12$">
+<meta property="og:description" content="当同时开发两个branch，本来想在featureA分支，却在featureB分支上开发了，并完成了commit。这时，想把在featureB的这次commit转移到featureA上，可以使用git的cherry-pick。cherry-pick可以把在另外的branch的某次提交转移到当前的branch上。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://rubb1sh.cn/images/defer%E5%92%8Creturn4.png">
-<meta property="og:updated_time" content="2020-08-08T12:54:48.815Z">
+<meta property="og:updated_time" content="2020-09-13T09:20:21.268Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="了解Golang中的defer与return的执行顺序">
-<meta name="twitter:description" content="先看这两部分代码： 1234567891011121314package mainimport &quot;fmt&quot;func fun1() (res int) &amp;#123;	defer func() &amp;#123;		res = res + 1000	&amp;#125;()	return res&amp;#125;func main() &amp;#123;	fmt.Println(fun1())&amp;#125;  12$">
-<meta name="twitter:image" content="http://rubb1sh.cn/images/defer%E5%92%8Creturn4.png">
+<meta name="twitter:title" content="每日一记 20200822">
+<meta name="twitter:description" content="当同时开发两个branch，本来想在featureA分支，却在featureB分支上开发了，并完成了commit。这时，想把在featureB的这次commit转移到featureA上，可以使用git的cherry-pick。cherry-pick可以把在另外的branch的某次提交转移到当前的branch上。">
 
 
 
@@ -88,7 +86,7 @@
   };
 </script>
 
-  <title> 了解Golang中的defer与return的执行顺序 | rubb1sh </title>
+  <title> 每日一记 20200822 | rubb1sh </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -218,7 +216,7 @@
             
             
               
-                了解Golang中的defer与return的执行顺序
+                每日一记 20200822
               
             
           </h1>
@@ -230,8 +228,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2020-08-08T12:26:04+08:00" content="2020-08-08">
-              2020-08-08
+            <time itemprop="dateCreated" datetime="2020-08-22T20:18:25+08:00" content="2020-08-22">
+              2020-08-22
             </time>
           </span>
 
@@ -244,8 +242,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/go/" itemprop="url" rel="index">
-                    <span itemprop="name">go</span>
+                  <a href="/categories/git/" itemprop="url" rel="index">
+                    <span itemprop="name">git</span>
                   </a>
                 </span>
 
@@ -276,27 +274,26 @@
       
 
       
-        <a id="more"></a>
+        <p>当同时开发两个branch，本来想在featureA分支，却在featureB分支上开发了，并完成了commit。这时，想把在featureB的这次commit转移到featureA上，可以使用git的cherry-pick。cherry-pick可以把在另外的branch的某次提交转移到当前的branch上。</p>
+<a id="more"></a>
 
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git cherry-pick &lt;commitHash&gt;</span><br></pre></td></tr></table></figure>
 
+<p><commithash>为你要转移的commit哈希号（哈希号可以通过git log查看，不用完整的哈希号，取前几个就好了）<br>如果需要获取的commit是另一个branch的最后commit，可以使用一下命令，而无需commitHash。</commithash></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git cherry-pick featureB</span><br></pre></td></tr></table></figure>
 
+<h3 id="转移多个分支"><a href="#转移多个分支" class="headerlink" title="转移多个分支"></a>转移多个分支</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git cherry-pick &lt;HashA&gt; &lt;HashB&gt;</span><br></pre></td></tr></table></figure>
 
-
-<p>先看这两部分代码：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">fun1</span><span class="params">()</span> <span class="params">(res <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		res = res + <span class="number">1000</span></span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(fun1())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> go run main.go</span></span><br><span class="line">1000</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">fun1</span><span class="params">()</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> res <span class="keyword">int</span></span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		res = res + <span class="number">1000</span></span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(fun1())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> go run main.go </span></span><br><span class="line">0</span><br></pre></td></tr></table></figure>
-
-<p>于是有了疑问，为什么res定义在函数签名中，和定义在函数体中，会有不同？此外，defer和return的执行顺序到底是defer在return前执行，还是在return之后执行？</p>
-<p>于是我打算通过汇编代码，看看go语言翻译成汇编之后，defer和return是谁先执行的，以及为啥return之后打印的值会不同。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go tool compile -l -N -S main.go &gt; obj.out</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/defer%E5%92%8Creturn4.png" alt="1"></p>
-<p>首先，我们通过逐行排查，发现在14行的地方，右边多了一步值拷贝的操作。而这步操作是把值放到了return返回值的地址中，之后，右边又拷贝了一次结果。之后，defer操作的值都是这个拷贝的值，而不是操作返回值。因此，res作为局部变量的时候，defer操作这个局部变量，是不会影响到返回值的。而左边，defer操作的就是返回值地址上的数据，所以最后会打印1000。<br>此外，我们也可以发现，defer是在return之前执行的（runtime.deferprocStack，在RET之前）。</p>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ol>
+<li>使用cherry-pick转移分支后需要处理merge的冲突。</li>
+<li>命令默认commit，同时使用转移的commit的提交信息。</li>
+</ol>
+<h3 id="其他选项"><a href="#其他选项" class="headerlink" title="其他选项"></a>其他选项</h3><ul>
+<li>如果想编辑提交记录，使用-e</li>
+<li>如果只更新工作区（git add），而不commit，使用-n，–no-commit</li>
+<li>冲突后，使用git cherry-pick –continue，完成后续分支转移</li>
+<li>–abort放弃git cherry-pick操作（和git merge的操作类似）</li>
+</ul>
 
       
     </div>
@@ -311,9 +308,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/go/" rel="tag">#go</a>
+            <a href="/tags/git/" rel="tag">#git</a>
           
-            <a href="/tags/源码/" rel="tag">#源码</a>
+            <a href="/tags/daily/" rel="tag">#daily</a>
           
         </div>
       
@@ -322,16 +319,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/12/03/go语言学习/" rel="next" title="go语言学习">
-                <i class="fa fa-chevron-left"></i> go语言学习
+              <a href="/2020/08/08/了解Golang中的defer与return的执行顺序/" rel="next" title="了解Golang中的defer与return的执行顺序">
+                <i class="fa fa-chevron-left"></i> 了解Golang中的defer与return的执行顺序
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/08/22/每日一记-20200822 (copy)/" rel="prev" title="每日一记 20200822">
-                每日一记 20200822 <i class="fa fa-chevron-right"></i>
+              <a href="/2020/08/23/gitcommit转移/" rel="prev" title="gitcommit转移">
+                gitcommit转移 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -457,7 +454,7 @@
               
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#转移多个分支"><span class="nav-number">1.</span> <span class="nav-text">转移多个分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意事项"><span class="nav-number">2.</span> <span class="nav-text">注意事项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他选项"><span class="nav-number">3.</span> <span class="nav-text">其他选项</span></a></li></ol></div>
             
           </div>
         </section>

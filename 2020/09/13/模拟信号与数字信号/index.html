@@ -41,7 +41,7 @@
 <link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="notes,daily,">
 
 
 
@@ -57,16 +57,22 @@
 
 
 
-<meta name="description" content="用于记录个人日常打代码遇到的技术问题">
-<meta property="og:type" content="website">
-<meta property="og:title" content="rubb1sh">
-<meta property="og:url" content="http://rubb1sh.cn/categories/java/类加载器/index.html">
+<meta name="description" content="前言分布式系统中面向流的通信部分讲到模拟信号和数字信号的转换，自己对模拟信号和数字信号进行了了解，并记录下来。">
+<meta name="keywords" content="notes,daily">
+<meta property="og:type" content="article">
+<meta property="og:title" content="模拟信号与数字信号">
+<meta property="og:url" content="http://rubb1sh.cn/2020/09/13/模拟信号与数字信号/index.html">
 <meta property="og:site_name" content="rubb1sh">
-<meta property="og:description" content="用于记录个人日常打代码遇到的技术问题">
+<meta property="og:description" content="前言分布式系统中面向流的通信部分讲到模拟信号和数字信号的转换，自己对模拟信号和数字信号进行了了解，并记录下来。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://rubb1sh.cn/images/%E6%A8%A1%E6%8B%9F%E4%BF%A1%E5%8F%B7.jpg">
+<meta property="og:image" content="http://rubb1sh.cn/images/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7.jpg">
+<meta property="og:image" content="http://rubb1sh.cn/images/%E6%A8%A1%E6%8B%9F%E4%BF%A1%E5%8F%B7%E8%BD%AC%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7.jpg">
+<meta property="og:updated_time" content="2020-09-13T09:20:12.852Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="rubb1sh">
-<meta name="twitter:description" content="用于记录个人日常打代码遇到的技术问题">
+<meta name="twitter:title" content="模拟信号与数字信号">
+<meta name="twitter:description" content="前言分布式系统中面向流的通信部分讲到模拟信号和数字信号的转换，自己对模拟信号和数字信号进行了了解，并记录下来。">
+<meta name="twitter:image" content="http://rubb1sh.cn/images/%E6%A8%A1%E6%8B%9F%E4%BF%A1%E5%8F%B7.jpg">
 
 
 
@@ -84,7 +90,7 @@
   };
 </script>
 
-  <title> 分类: 类加载器 | rubb1sh </title>
+  <title> 模拟信号与数字信号 | rubb1sh </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -105,7 +111,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-right  ">
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -193,45 +199,143 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2>
-        类加载器
-        <small>分类</small>
-      </h2>
-    </div>
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                模拟信号与数字信号
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2020-09-13T15:29:25+08:00" content="2020-09-13">
+              2020-09-13
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/notes/" itemprop="url" rel="index">
+                    <span itemprop="name">notes</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
       
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><pre><code>分布式系统中面向流的通信部分讲到模拟信号和数字信号的转换，自己对模拟信号和数字信号进行了了解，并记录下来。</code></pre><a id="more"></a>
 
-      <h1 class="post-title">
+<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><pre><code>PCM脉冲编码调制（Pulse Code Modulation）是将时间连续的模拟信号，转换成时间离散的数字信号。因为在计算机网络中，数据会被表示为0和1，因此，为了视频数据能被发送，需要对模拟信号转换成01的数字信号。此外，模拟信号的抗干扰能力较弱，远不如数字信号。</code></pre><p><img src="/images/%E6%A8%A1%E6%8B%9F%E4%BF%A1%E5%8F%B7.jpg" alt="模拟信号"><br><img src="/images/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7.jpg" alt="数字信号"></p>
+<h3 id="模拟信号转数字信号"><a href="#模拟信号转数字信号" class="headerlink" title="模拟信号转数字信号"></a>模拟信号转数字信号</h3><pre><code>模拟信号转数字信号主要分为3个阶段，分别是取样、量化、编码。</code></pre><p><img src="/images/%E6%A8%A1%E6%8B%9F%E4%BF%A1%E5%8F%B7%E8%BD%AC%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7.jpg" alt="模拟信号转数字信号"></p>
+<ol>
+<li>第一阶段取样会对模拟信号进行按照时间轴进行均分成各个块。</li>
+<li>第二阶段量化对每个块中，模拟信号的值进行表示。一般是进行二进制表示。这样每个块中的模拟信号就会被近似成一个值，而不是一条曲线（由线性变成了离散数值）。</li>
+<li>第三阶段编码，会把量化后的二进制数值连续起来，成一个二进制数值串。</li>
+</ol>
+<p>例如：音频流需要达到CD音质，那么对原始声波（模拟信号）的取样频率是44100Hz（把1秒划分成44100个块）。这样数字信号还原出来的模拟信号会相对逼真。</p>
+
+      
+    </div>
+
+    <div>
+      
         
-            <a class="post-title-link" href="/2019/08/24/java类加载器实战/" itemprop="url">
-              
-                <span itemprop="name">java类加载器实战</span>
-              
-            </a>
-        
-      </h1>
+      
+    </div>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-08-24T19:08:48+08:00" content="2019-08-24">
-          08-24
-        </time>
-      </div>
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/notes/" rel="tag">#notes</a>
+          
+            <a href="/tags/daily/" rel="tag">#daily</a>
+          
+        </div>
+      
 
-    </header>
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/23/gitcommit转移/" rel="next" title="gitcommit转移">
+                <i class="fa fa-chevron-left"></i> gitcommit转移
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </article>
 
 
-    
-  </section>
 
-  
-
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -239,6 +343,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -258,8 +366,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image" src="https://avatars3.githubusercontent.com/u/22258742?s=460&v=4" alt="rubb1sh">
           <p class="site-author-name" itemprop="name">rubb1sh</p>
@@ -320,6 +437,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#背景"><span class="nav-number">2.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模拟信号转数字信号"><span class="nav-number">3.</span> <span class="nav-text">模拟信号转数字信号</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -404,6 +532,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=0.5.0"></script>
+
+
 
   
 
