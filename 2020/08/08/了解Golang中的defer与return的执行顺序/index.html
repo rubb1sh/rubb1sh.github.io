@@ -57,19 +57,19 @@
 
 
 
-<meta name="description" content="先看这两部分代码： 1234567891011121314package mainimport &quot;fmt&quot;func fun1() (res int) &amp;#123;	defer func() &amp;#123;		res = res + 1000	&amp;#125;()	return res&amp;#125;func main() &amp;#123;	fmt.Println(fun1())&amp;#125;  12$">
+<meta name="description" content="先看这两部分代码：">
 <meta name="keywords" content="go,源码">
 <meta property="og:type" content="article">
 <meta property="og:title" content="了解Golang中的defer与return的执行顺序">
 <meta property="og:url" content="http://rubb1sh.cn/2020/08/08/了解Golang中的defer与return的执行顺序/index.html">
 <meta property="og:site_name" content="rubb1sh">
-<meta property="og:description" content="先看这两部分代码： 1234567891011121314package mainimport &quot;fmt&quot;func fun1() (res int) &amp;#123;	defer func() &amp;#123;		res = res + 1000	&amp;#125;()	return res&amp;#125;func main() &amp;#123;	fmt.Println(fun1())&amp;#125;  12$">
+<meta property="og:description" content="先看这两部分代码：">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://rubb1sh.cn/images/defer%E5%92%8Creturn4.png">
-<meta property="og:updated_time" content="2020-08-08T12:54:48.815Z">
+<meta property="og:updated_time" content="2020-09-13T09:25:20.155Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="了解Golang中的defer与return的执行顺序">
-<meta name="twitter:description" content="先看这两部分代码： 1234567891011121314package mainimport &quot;fmt&quot;func fun1() (res int) &amp;#123;	defer func() &amp;#123;		res = res + 1000	&amp;#125;()	return res&amp;#125;func main() &amp;#123;	fmt.Println(fun1())&amp;#125;  12$">
+<meta name="twitter:description" content="先看这两部分代码：">
 <meta name="twitter:image" content="http://rubb1sh.cn/images/defer%E5%92%8Creturn4.png">
 
 
@@ -276,13 +276,9 @@
       
 
       
-        <a id="more"></a>
+        <p>先看这两部分代码：</p>
+<a id="more"></a>
 
-
-
-
-
-<p>先看这两部分代码：</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">fun1</span><span class="params">()</span> <span class="params">(res <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		res = res + <span class="number">1000</span></span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(fun1())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> go run main.go</span></span><br><span class="line">1000</span><br></pre></td></tr></table></figure>

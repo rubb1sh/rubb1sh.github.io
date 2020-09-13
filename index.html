@@ -608,30 +608,12 @@
 
       
         
-          
-            <a id="more"></a>
-
-
-
-
-
-<p>先看这两部分代码：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">fun1</span><span class="params">()</span> <span class="params">(res <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		res = res + <span class="number">1000</span></span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(fun1())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> go run main.go</span></span><br><span class="line">1000</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">fun1</span><span class="params">()</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> res <span class="keyword">int</span></span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		res = res + <span class="number">1000</span></span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(fun1())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> go run main.go </span></span><br><span class="line">0</span><br></pre></td></tr></table></figure>
-
-<p>于是有了疑问，为什么res定义在函数签名中，和定义在函数体中，会有不同？此外，defer和return的执行顺序到底是defer在return前执行，还是在return之后执行？</p>
-<p>于是我打算通过汇编代码，看看go语言翻译成汇编之后，defer和return是谁先执行的，以及为啥return之后打印的值会不同。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go tool compile -l -N -S main.go &gt; obj.out</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/defer%E5%92%8Creturn4.png" alt="1"></p>
-<p>首先，我们通过逐行排查，发现在14行的地方，右边多了一步值拷贝的操作。而这步操作是把值放到了return返回值的地址中，之后，右边又拷贝了一次结果。之后，defer操作的值都是这个拷贝的值，而不是操作返回值。因此，res作为局部变量的时候，defer操作这个局部变量，是不会影响到返回值的。而左边，defer操作的就是返回值地址上的数据，所以最后会打印1000。<br>此外，我们也可以发现，defer是在return之前执行的（runtime.deferprocStack，在RET之前）。</p>
-
-          
+          <p>先看这两部分代码：</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2020/08/08/了解Golang中的defer与return的执行顺序/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -736,39 +718,12 @@
 
       
         
-          
-            <a id="more"></a>
-
-
-
-
-<h3 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h3><p>​        go语言有指针（像c），不过没有指针的运算（防止非法内存访问）</p>
-<h3 id="包的初始化"><a href="#包的初始化" class="headerlink" title="包的初始化"></a>包的初始化</h3><p>​        每个包都有一个可以包含这个初始化函数。这个函数不能被调用。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123; <span class="comment">/*...*/</span> &#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h3><p>作用域和生命周期有所不同。</p>
-<p>生命周期是指：一个变量被程序引用的起止时间。</p>
-<p>作用域：是指声明的程序出现的区域。（一般描述一个函数或者变量，他是一个编译时期的属性）</p>
-<p>首先，了解作用域之前，需要明白语法块（block）是由大括号围起来的一个语句序列，比如一个循环体、一个函数。</p>
-<p>因此，block内部声明的变量对外部是不可见的。</p>
-<p>此外，一个没有显示包含大括号{}的声明代码，我们称为“词法块“。所以，每个block，我们都可以看成是一个“词法块”。而全部的源码的词法块，我们称为“全剧块”。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">func f() &#123;&#125;</span><br><span class="line">var g = &quot;g&quot;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	f := &quot;f&quot;</span><br><span class="line">	fmt.Println(f) //go会优先使用main代码块里的f变量，而不是f()</span><br><span class="line">	fmt.Println(p)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h3><p>​        go语言的数据类型：基础类型（basic type）、聚合类型（aggregate type）、引用类型（reference type）、接口类型（interface type）。</p>
-<h4 id="3-1-整数"><a href="#3-1-整数" class="headerlink" title="3.1 整数"></a>3.1 整数</h4><p>​        go有有符号整数和无符号整数，根据不同的byte又分几种。int8、int16、int32、int64。uint8、uint16、uint32、uint64。</p>
-<h4 id="3-2-浮点数"><a href="#3-2-浮点数" class="headerlink" title="3.2 浮点数"></a>3.2 浮点数</h4><p>​        float32、float64</p>
-<h4 id="3-3-复数"><a href="#3-3-复数" class="headerlink" title="3.3 复数"></a>3.3 复数</h4><p>​        complex64和complex128。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x <span class="keyword">complex128</span> = <span class="built_in">complex</span>(<span class="number">1</span>, <span class="number">2</span>) <span class="comment">// 1+2i</span></span><br><span class="line"><span class="keyword">var</span> y <span class="keyword">complex128</span> = <span class="built_in">complex</span>(<span class="number">3</span>, <span class="number">4</span>) <span class="comment">// 3+4i</span></span><br><span class="line">fmt.Println(x*y) <span class="comment">//(-5+10i)</span></span><br><span class="line">fmt.Println(<span class="built_in">real</span>(x*y)) <span class="comment">// -5</span></span><br><span class="line">fmt.Println(<span class="built_in">imag</span>(x*y)) <span class="comment">// 10</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="3-4-布尔值"><a href="#3-4-布尔值" class="headerlink" title="3.4 布尔值"></a>3.4 布尔值</h4><h4 id="3-5-字符串"><a href="#3-5-字符串" class="headerlink" title="3.5 字符串"></a>3.5 字符串</h4><h3 id="Golang-Runtime"><a href="#Golang-Runtime" class="headerlink" title="Golang Runtime"></a>Golang Runtime</h3><p>​        学习一门语言，往往让我比较痴迷或者感兴趣的点其实是这门语言的优势，但是优势底线肯定是语言设计者的哲学所在，通过了解语言的底层实现和设计者的想法，会让我忍不住惊叹设计者的想法是多么的有趣。而golang显然是一门让我觉得足够优秀，包括它的哲学而简洁，以及对并发天生的支持。</p>
-<h3 id="Goroutine"><a href="#Goroutine" class="headerlink" title="Goroutine"></a>Goroutine</h3><p>​        </p>
-<p>参考链接：</p>
-<p><a href="https://johng.cn/goroutine1-pmg/" target="_blank" rel="noopener">https://johng.cn/goroutine1-pmg/</a></p>
-<p><a href="http://morsmachine.dk/go-scheduler" target="_blank" rel="noopener">http://morsmachine.dk/go-scheduler</a></p>
-<p><a href="https://www.zhihu.com/question/20862617" target="_blank" rel="noopener">https://www.zhihu.com/question/20862617</a></p>
-<p>​    </p>
-
-          
+          <p>Go语言学习总结</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2019/12/03/go语言学习/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
