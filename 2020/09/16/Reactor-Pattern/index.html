@@ -41,7 +41,7 @@
 <link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="daily,git,">
+  <meta name="keywords" content="设计模式,daily,">
 
 
 
@@ -57,18 +57,21 @@
 
 
 
-<meta name="description" content="当同时开发两个branch，本来想在featureA分支，却在featureB分支上开发了，并完成了commit。这时，想把在featureB的这次commit转移到featureA上，可以使用git的cherry-pick。cherry-pick可以把在另外的branch的某次提交转移到当前的branch上。">
-<meta name="keywords" content="daily,git">
+<meta name="description" content="在看Kafka客户端的网络实现使用了Reactor模式">
+<meta name="keywords" content="设计模式,daily">
 <meta property="og:type" content="article">
-<meta property="og:title" content="每日一记 20200822">
-<meta property="og:url" content="http://rubb1sh.cn/2020/08/22/每日一记-20200822 (copy)/index.html">
+<meta property="og:title" content="Reactor Pattern">
+<meta property="og:url" content="http://rubb1sh.cn/2020/09/16/Reactor-Pattern/index.html">
 <meta property="og:site_name" content="rubb1sh">
-<meta property="og:description" content="当同时开发两个branch，本来想在featureA分支，却在featureB分支上开发了，并完成了commit。这时，想把在featureB的这次commit转移到featureA上，可以使用git的cherry-pick。cherry-pick可以把在另外的branch的某次提交转移到当前的branch上。">
+<meta property="og:description" content="在看Kafka客户端的网络实现使用了Reactor模式">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-09-13T09:20:21.268Z">
+<meta property="og:image" content="http://rubb1sh.cn/images/Reactor_Structures.png">
+<meta property="og:image" content="http://rubb1sh.cn/images/Reactor_Sequence.png">
+<meta property="og:updated_time" content="2020-09-16T09:39:48.569Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="每日一记 20200822">
-<meta name="twitter:description" content="当同时开发两个branch，本来想在featureA分支，却在featureB分支上开发了，并完成了commit。这时，想把在featureB的这次commit转移到featureA上，可以使用git的cherry-pick。cherry-pick可以把在另外的branch的某次提交转移到当前的branch上。">
+<meta name="twitter:title" content="Reactor Pattern">
+<meta name="twitter:description" content="在看Kafka客户端的网络实现使用了Reactor模式">
+<meta name="twitter:image" content="http://rubb1sh.cn/images/Reactor_Structures.png">
 
 
 
@@ -86,7 +89,7 @@
   };
 </script>
 
-  <title> 每日一记 20200822 | rubb1sh </title>
+  <title> Reactor Pattern | rubb1sh </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -216,7 +219,7 @@
             
             
               
-                每日一记 20200822
+                Reactor Pattern
               
             
           </h1>
@@ -228,8 +231,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2020-08-22T20:18:25+08:00" content="2020-08-22">
-              2020-08-22
+            <time itemprop="dateCreated" datetime="2020-09-16T17:17:16+08:00" content="2020-09-16">
+              2020-09-16
             </time>
           </span>
 
@@ -242,8 +245,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/git/" itemprop="url" rel="index">
-                    <span itemprop="name">git</span>
+                  <a href="/categories/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
                   </a>
                 </span>
 
@@ -274,26 +277,18 @@
       
 
       
-        <p>当同时开发两个branch，本来想在featureA分支，却在featureB分支上开发了，并完成了commit。这时，想把在featureB的这次commit转移到featureA上，可以使用git的cherry-pick。cherry-pick可以把在另外的branch的某次提交转移到当前的branch上。</p>
+        <p>在看Kafka客户端的网络实现使用了Reactor模式</p>
 <a id="more"></a>
 
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git cherry-pick &lt;commitHash&gt;</span><br></pre></td></tr></table></figure>
 
-<p><commithash>为你要转移的commit哈希号（哈希号可以通过git log查看，不用完整的哈希号，取前几个就好了）<br>如果需要获取的commit是另一个branch的最后commit，可以使用一下命令，而无需commitHash。</commithash></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git cherry-pick featureB</span><br></pre></td></tr></table></figure>
-
-<h3 id="转移多个分支"><a href="#转移多个分支" class="headerlink" title="转移多个分支"></a>转移多个分支</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git cherry-pick &lt;HashA&gt; &lt;HashB&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ol>
-<li>使用cherry-pick转移分支后需要处理merge的冲突。</li>
-<li>命令默认commit，同时使用转移的commit的提交信息。</li>
-</ol>
-<h3 id="其他选项"><a href="#其他选项" class="headerlink" title="其他选项"></a>其他选项</h3><ul>
-<li>如果想编辑提交记录，使用-e</li>
-<li>如果只更新工作区（git add），而不commit，使用-n，–no-commit</li>
-<li>冲突后，使用git cherry-pick –continue，完成后续分支转移</li>
-<li>–abort放弃git cherry-pick操作（和git merge的操作类似）</li>
+<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>计算机网络中，一个服务往往会定义多个socket描述文件，用于获取不同的网络请求。然后一个过来的网络请求往往需要做多个处理，比如：可能会把一个网络请求打印到终端，同时又需要写入文件。使用Reactor模式，每个动作定义为一种handler（处理者），把handler和对应的socket文件描述文件绑定，当一个请求过来时，由一个中心控制器去找对应的handler进行处理。</p>
+<h3 id="Reactor结构"><a href="#Reactor结构" class="headerlink" title="Reactor结构"></a>Reactor结构</h3><p><img src="/images/Reactor_Structures.png" alt="Reactor_Structures"></p>
+<ul>
+<li>Initiation Dispatcher：请求分发器（上边提到的中心控制器），handler注册到其中，当请求来时（到Dispatcher)，Dispatcher找对应的handler处理（handler可以是多个）</li>
+<li>Event Handler：抽象Handler</li>
+<li>Concrete Event Handler：Handler的具体实现</li>
 </ul>
+<h3 id="Reactor实现"><a href="#Reactor实现" class="headerlink" title="Reactor实现"></a>Reactor实现</h3><p><img src="/images/Reactor_Sequence.png" alt="Reactor_Sequence"></p>
 
       
     </div>
@@ -308,9 +303,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/daily/" rel="tag">#daily</a>
+            <a href="/tags/设计模式/" rel="tag">#设计模式</a>
           
-            <a href="/tags/git/" rel="tag">#git</a>
+            <a href="/tags/daily/" rel="tag">#daily</a>
           
         </div>
       
@@ -319,17 +314,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/08/08/了解Golang中的defer与return的执行顺序/" rel="next" title="了解Golang中的defer与return的执行顺序">
-                <i class="fa fa-chevron-left"></i> 了解Golang中的defer与return的执行顺序
+              <a href="/2020/09/13/模拟信号与数字信号/" rel="next" title="模拟信号与数字信号">
+                <i class="fa fa-chevron-left"></i> 模拟信号与数字信号
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/08/23/gitcommit转移/" rel="prev" title="gitcommit转移">
-                gitcommit转移 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -454,7 +445,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#转移多个分支"><span class="nav-number">1.</span> <span class="nav-text">转移多个分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意事项"><span class="nav-number">2.</span> <span class="nav-text">注意事项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他选项"><span class="nav-number">3.</span> <span class="nav-text">其他选项</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reactor结构"><span class="nav-number">2.</span> <span class="nav-text">Reactor结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reactor实现"><span class="nav-number">3.</span> <span class="nav-text">Reactor实现</span></a></li></ol></div>
             
           </div>
         </section>
