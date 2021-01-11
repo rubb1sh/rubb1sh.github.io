@@ -217,6 +217,209 @@
             
               
                 
+                <a class="post-title-link" href="/2021/01/11/Golang-json-Unmarshal小坑/" itemprop="url">
+                  Golang json.Unmarshal小坑
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2021-01-11T16:41:03+08:00" content="2021-01-11">
+              2021-01-11
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/go/" itemprop="url" rel="index">
+                    <span itemprop="name">go</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>json.Unmarshal()解析json字符串时，不管json解析是否成功，传进去的指针都会被修改</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2021/01/11/Golang-json-Unmarshal小坑/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2020/12/29/比特币原理浅谈/" itemprop="url">
+                  比特币原理浅谈
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2020-12-29T15:12:15+08:00" content="2020-12-29">
+              2020-12-29
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <a id="more"></a>
+
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在了解了比特币之后，打算写下这篇比特币原来浅谈，并通过一个由浅入深的的顺序讲一下什么是比特币，从存在的原因再到比特币的底层原理实现</p>
+<h3 id="什么是比特币"><a href="#什么是比特币" class="headerlink" title="什么是比特币"></a>什么是比特币</h3><p>这里我从维基百科摘录了对比特币的介绍：<em>比特币（英语：Bitcoin，缩写：BTC 或 XBT）是一种基于<strong>去中心化</strong>，采用<strong>点对点网络</strong>与共识主动性，开放源代码，以区块链作为底层技术的加密货币</em></p>
+<h4 id="去中心化"><a href="#去中心化" class="headerlink" title="去中心化"></a>去中心化</h4><p>很多人一开始可能会以为去中心化是一种新的技术，其实不然。去中心化是一种互联网的社会关系形态。举个例子：像微信、淘宝等互联网应用都是掌握在各个公司的，是一种中心化的管理方式，而我们使用者（用户）仅仅是去使用他。任何聊天内容、交易都是需要通过微信、淘宝的服务器去传递。去中心化这是让每个想参与成为服务端的人都有机会成为，可以自由加入离开，每个人即可以是用户也可以是提供服务的人。而比特币拥有去中心化的特性，比特币作为一种虚拟货币，是需要有人来维护一个全局的账本，而任意的人都可以加入其中，维护这个账本（即记录谁给谁转帐多少），而这个账本在传统的行业中，都是由银行或者公司维护的。</p>
+<h4 id="点对点网络"><a href="#点对点网络" class="headerlink" title="点对点网络"></a>点对点网络</h4>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2020/09/16/Reactor-Pattern/" itemprop="url">
                   Reactor Pattern
                 </a>
@@ -1089,239 +1292,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2019/08/21/git命令大全/" itemprop="url">
-                  git命令大全
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2019-08-21T15:50:42+08:00" content="2019-08-21">
-              2019-08-21
-            </time>
-          </span>
-
-          
-            <span class="post-category">
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/git/" itemprop="url" rel="index">
-                    <span itemprop="name">git</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>赶紧常用的git命令需要背一下了，不然每次想起命令不知道具体是什么。所以找了一个看起来还行的博客，把命令背一下。add comment这种太常用的就不写了，写一些不是太常用的。</p>
-<h3 id="原文链接"><a href="#原文链接" class="headerlink" title="原文链接"></a><a href="https://blog.csdn.net/dengsilinming/article/details/8000622" target="_blank"><a href="https://blog.csdn.net/dengsilinming/article/details/8000622" target="_blank" rel="noopener">原文链接</a></a></h3>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2019/08/21/git命令大全/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2019/08/09/JVM垃圾回收算法/" itemprop="url">
-                  JVM垃圾回收算法
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2019-08-09T19:22:56+08:00" content="2019-08-09">
-              2019-08-09
-            </time>
-          </span>
-
-          
-            <span class="post-category">
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/java/jvm/" itemprop="url" rel="index">
-                    <span itemprop="name">jvm</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="JVM垃圾回收机制"><a href="#JVM垃圾回收机制" class="headerlink" title="JVM垃圾回收机制"></a>JVM垃圾回收机制</h3><p>​        jvm垃圾回收机制看《jvm入门》就了解过，加上这部分内容不难，自己列一下要记的东西，准备面试就行。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2019/08/09/JVM垃圾回收算法/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1365,7 +1335,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">16</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1432,7 +1402,7 @@
         <div class="copyright">
   
   &copy;  2019 - 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
