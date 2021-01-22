@@ -217,6 +217,127 @@
             
               
                 
+                <a class="post-title-link" href="/2021/01/20/什么是GraphQL以及为什么要使用GraphQL而非RESTFUL/" itemprop="url">
+                  什么是GraphQL以及为什么要使用GraphQL而非RESTFUL
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2021-01-20T15:02:05+08:00" content="2021-01-20">
+              2021-01-20
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/GraphQL/" itemprop="url" rel="index">
+                    <span itemprop="name">GraphQL</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <a id="more"></a>
+
+<p>接触到GraphQL是在一个偶然的机会，发现公司有团队使用GraphQL，让我通过GraphQL的playground去调用他们接口，当时年少无知的我，对GraphQL一点不了解，从字面意思感觉是一个图数据库，然后GraphQL是这个数据库的一种查询语言。。OK，换回正题。</p>
+<h3 id="什么是GraphQL"><a href="#什么是GraphQL" class="headerlink" title="什么是GraphQL"></a>什么是GraphQL</h3><p>GraphQL是一种API规范，而非什么图数据库或者图数据库查询语言。</p>
+<h3 id="为什么要有GraphQL，而且目前正要威胁到目前最流行的API规范——RESTful呢"><a href="#为什么要有GraphQL，而且目前正要威胁到目前最流行的API规范——RESTful呢" class="headerlink" title="为什么要有GraphQL，而且目前正要威胁到目前最流行的API规范——RESTful呢"></a>为什么要有GraphQL，而且目前正要威胁到目前最流行的API规范——RESTful呢</h3><p>从历史上看，RESTful规范是是Roy Thomas Fielding在他2000年的博士论文中提出的，在当时是一种比较先进的思想，不管是约束Web服务中的数据格式，还是使得服务更通用。而在当前仍然主流的原因呢？一是让前后端分离，后端只需要把请求的响应以json格式返回给前端；二是在微服务流行的当下，服务之间通过RPC进行调用，而RESTful规范对响应进行结构化约束，可以降低开发人员的沟通成本（通过API规范就能知道对方的服务怎么使用）。既然RESTful那么好，为什么GraphQL会威胁到RESTful的地位呢？我先给出结论，再通过例子进行说明。结论是GraphQL可以减轻RESTful规范的冗余。</p>
+<p>首先，我们构造一种情景，在一个图书管理系统中，我们打开一个介绍某本书的页面。这时，这个页面应该包括图书信息，以及部分图书作者信息（这是比较初略的，一般的话还会有更多信息，例如库存等）。</p>
+<p>RESTful：</p>
+<p><img src="/images/RESTful.jpg" alt="RESTful"></p>
+<p>GraphQL:</p>
+<p><img src="/images/GraphQL.png" alt="GraphQL"></p>
+<p>对比可以看出，RESTful获取图书信息和作者信息时，会进行两次请求，先拿到图书信息和作者Id，再通过作者Id拿到作者信息，这还是相对简单的情况，当一个页面需要的信息变多时，RESTful请求次数会更多。当然，有的人可能会说：噢，为什么要请求两次，我把图书信息和作者信息都封装在一个请求中，不就能做到一次请求获取图书信息和作者信息了么？ok，这种想法当然是很正常的。但是RESTful的冗余的设计会体现在，当你这时候又突然需要在图书信息和作者信息之上，再增加国家信息的时候（获得作者所在国家的国家信息）或者又有一个页面仅仅只需要图书信息的时候，RESTful就又得开发一套接口了。</p>
+<p>我们再来看看，GraphQL的表现，上面我们介绍了什么是GraphQL，仅仅是从一个很浅的层面说了GraphQL是一种API规范。GraphQL还是一种结构化的API查询语言。易于拓展，还是以上边为例，当需要图书信息和作者信息时，在请求的json中显示的声明就可以拿到，如果仅需要图书信息时，可以把声明的作者信息给去掉，接口就会仅返回图书信息（根据上图可以想象得到）。GraphQL可以动态获取自己想要的数据，从一个终端，而RESTful需要实现相对应的功能则需要开发多个终端，所以GraphQL极大的降低了开发成本，提高开发效率。此外，GraphQL是在API层面的统一，不侵入数据库，开发人员可以在接口层面统一，实现GraphQL的终端（/graphQL/playground）。不过在数据库设计时，抽象成图的结构，会更加方便GraphQL在API层的统一，因为GraphQL这个API规范，结构就很像一个图，就如它的名字一样GraphQL，图的查询语言，不过是在API层面的抽象。</p>
+<p><img src="/images/graphStruct.png" alt="graphStruct"></p>
+<h3 id="我们可以怎么使用GraphQL"><a href="#我们可以怎么使用GraphQL" class="headerlink" title="我们可以怎么使用GraphQL"></a>我们可以怎么使用GraphQL</h3><p>既然发现了GraphQL的好，那么就会想要使用到自己到项目中。我自己也有思考过这个问题，什么样的项目时候使用GraphQL。首先GraphQL是以图为结构的API查询语言，自然是希望项目的结构能转换成图的结构（关系型数据），就像上图的这种，书和作者有关联关系，作者又和图书有关联关系。对于项目无法转换成相连接的关系结构的，那使用GraphQL或者API抽象成GraphQL其实反倒是增加了开发成本。此外，如果发现项目适合使用GraphQL，但是已经项目已经开发了，不希望全部重构，只在新的部分使用GraphQL也是ok的，因为GraphQL是API层面的抽象，因此你可以选择在想使用的地方使用它。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2021/01/11/Golang-json-Unmarshal小坑/" itemprop="url">
                   Golang json.Unmarshal小坑
                 </a>
@@ -1181,117 +1302,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2019/08/23/macos中mysql进程不能被关闭问题/" itemprop="url">
-                  macOS中mysql进程不能被关闭问题
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2019-08-23T01:44:31+08:00" content="2019-08-23">
-              2019-08-23
-            </time>
-          </span>
-
-          
-            <span class="post-category">
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/mysql/" itemprop="url" rel="index">
-                    <span itemprop="name">mysql</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>​        在macOS下安装mysql数据库有两种方式，1种是通过使用brew安装，1种是通过去mysql官网下载包安装。</p>
-<p>使用后者安装的好处是，mysql的安装包会自动配置好大部分内容，并且能在系统偏好设置中管理mysql数据库的开关。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2019/08/23/macos中mysql进程不能被关闭问题/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1335,7 +1345,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1343,7 +1353,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -1352,7 +1362,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

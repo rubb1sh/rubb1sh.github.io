@@ -41,7 +41,7 @@
 <link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="go,">
+  <meta name="keywords" content="GraphQL,">
 
 
 
@@ -57,18 +57,22 @@
 
 
 
-<meta name="description" content="json.Unmarshal()解析json字符串时，不管json解析是否成功，传进去的指针都会被修改">
-<meta name="keywords" content="go">
+<meta name="description" content="接触到GraphQL是在一个偶然的机会，发现公司有团队使用GraphQL，让我通过GraphQL的playground去调用他们接口，当时年少无知的我，对GraphQL一点不了解，从字面意思感觉是一个图数据库，然后GraphQL是这个数据库的一种查询语言。。OK，换回正题。 什么是GraphQLGraphQL是一种API规范，而非什么图数据库或者图数据库查询语言。 为什么要有GraphQL，而">
+<meta name="keywords" content="GraphQL">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Golang json.Unmarshal小坑">
-<meta property="og:url" content="http://rubb1sh.cn/2021/01/11/Golang-json-Unmarshal小坑/index.html">
+<meta property="og:title" content="什么是GraphQL以及为什么要使用GraphQL而非RESTFUL">
+<meta property="og:url" content="http://rubb1sh.cn/2021/01/20/什么是GraphQL以及为什么要使用GraphQL而非RESTFUL/index.html">
 <meta property="og:site_name" content="rubb1sh">
-<meta property="og:description" content="json.Unmarshal()解析json字符串时，不管json解析是否成功，传进去的指针都会被修改">
+<meta property="og:description" content="接触到GraphQL是在一个偶然的机会，发现公司有团队使用GraphQL，让我通过GraphQL的playground去调用他们接口，当时年少无知的我，对GraphQL一点不了解，从字面意思感觉是一个图数据库，然后GraphQL是这个数据库的一种查询语言。。OK，换回正题。 什么是GraphQLGraphQL是一种API规范，而非什么图数据库或者图数据库查询语言。 为什么要有GraphQL，而">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-01-11T09:17:58.152Z">
+<meta property="og:image" content="http://rubb1sh.cn/images/RESTful.jpg">
+<meta property="og:image" content="http://rubb1sh.cn/images/GraphQL.png">
+<meta property="og:image" content="http://rubb1sh.cn/images/graphStruct.png">
+<meta property="og:updated_time" content="2021-01-22T04:00:41.776Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Golang json.Unmarshal小坑">
-<meta name="twitter:description" content="json.Unmarshal()解析json字符串时，不管json解析是否成功，传进去的指针都会被修改">
+<meta name="twitter:title" content="什么是GraphQL以及为什么要使用GraphQL而非RESTFUL">
+<meta name="twitter:description" content="接触到GraphQL是在一个偶然的机会，发现公司有团队使用GraphQL，让我通过GraphQL的playground去调用他们接口，当时年少无知的我，对GraphQL一点不了解，从字面意思感觉是一个图数据库，然后GraphQL是这个数据库的一种查询语言。。OK，换回正题。 什么是GraphQLGraphQL是一种API规范，而非什么图数据库或者图数据库查询语言。 为什么要有GraphQL，而">
+<meta name="twitter:image" content="http://rubb1sh.cn/images/RESTful.jpg">
 
 
 
@@ -86,7 +90,7 @@
   };
 </script>
 
-  <title> Golang json.Unmarshal小坑 | rubb1sh </title>
+  <title> 什么是GraphQL以及为什么要使用GraphQL而非RESTFUL | rubb1sh </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -216,7 +220,7 @@
             
             
               
-                Golang json.Unmarshal小坑
+                什么是GraphQL以及为什么要使用GraphQL而非RESTFUL
               
             
           </h1>
@@ -228,8 +232,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2021-01-11T16:41:03+08:00" content="2021-01-11">
-              2021-01-11
+            <time itemprop="dateCreated" datetime="2021-01-20T15:02:05+08:00" content="2021-01-20">
+              2021-01-20
             </time>
           </span>
 
@@ -242,8 +246,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/go/" itemprop="url" rel="index">
-                    <span itemprop="name">go</span>
+                  <a href="/categories/GraphQL/" itemprop="url" rel="index">
+                    <span itemprop="name">GraphQL</span>
                   </a>
                 </span>
 
@@ -274,20 +278,20 @@
       
 
       
-        <p>json.Unmarshal()解析json字符串时，不管json解析是否成功，传进去的指针都会被修改</p>
-<a id="more"></a>
+        <a id="more"></a>
 
-<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>对一个json字符串进行解析，当对这个json字符串格式未知时，使用两种结构体进行解析，当第一种解析失败调用第二种，以确保json字符串能完成解析。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"encoding/json"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"strconv"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Node <span class="keyword">struct</span> &#123;</span><br><span class="line">	Node <span class="keyword">string</span> <span class="string">`json:"node"`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> NodeV2 <span class="keyword">struct</span> &#123;</span><br><span class="line">	Node <span class="keyword">int</span> <span class="string">`json:"node"`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	jsonStr := <span class="string">`[&#123;"node":1&#125;, &#123;"node":2&#125;]`</span></span><br><span class="line">	node := []Node&#123;&#125;</span><br><span class="line">	nodeV2 := []NodeV2&#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> err := json.Unmarshal([]<span class="keyword">byte</span>(jsonStr), &amp;node); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="comment">// v1解析失败时，使用v2</span></span><br><span class="line">		<span class="keyword">if</span> err := json.Unmarshal([]<span class="keyword">byte</span>(jsonStr), &amp;nodeV2); err != <span class="literal">nil</span> &#123;</span><br><span class="line">			fmt.Println(err)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// v2解析成功，把v2结果转换成v1</span></span><br><span class="line">		<span class="keyword">for</span> _, item := <span class="keyword">range</span> nodeV2 &#123;</span><br><span class="line">			node = <span class="built_in">append</span>(node, Node&#123;Node: strconv.Itoa(item.Node)&#125;)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 希望是[&#123;1&#125; &#123;2&#125;]</span></span><br><span class="line">	<span class="comment">// 结果[&#123;&#125; &#123;&#125; &#123;1&#125; &#123;2&#125;]</span></span><br><span class="line">	fmt.Println(node) </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><p>json.Unmarshal()当解析失败时，原来传进去的指针值也已经被修改。因此，需要重置原来的指针</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> err := json.Unmarshal([]<span class="keyword">byte</span>(jsonStr), &amp;node); err != <span class="literal">nil</span> &#123;</span><br><span class="line">	<span class="comment">// v1解析失败时，使用v2</span></span><br><span class="line">	node = []Node&#123;&#125; <span class="comment">// &lt;-------------------------- 重置</span></span><br><span class="line">	<span class="keyword">if</span> err := json.Unmarshal([]<span class="keyword">byte</span>(jsonStr), &amp;nodeV2); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="string">'''</span><span class="string">'''</span><span class="string">''</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="more"><a href="#more" class="headerlink" title="more"></a>more</h3><p>查看了golang.org的相关文档，也有解释：</p>
-<blockquote>
-<p>If a JSON value is not appropriate for a given target type, or if a JSON number overflows the target type, Unmarshal <strong>skips</strong> that field and <strong>completes the unmarshaling as best it can</strong>. If no more serious errors are encountered, Unmarshal returns an UnmarshalTypeError describing the earliest such error. In any case, it’s not guaranteed that all the remaining fields following the problematic one will be unmarshaled into the target object.</p>
-</blockquote>
-<p>json.Unmarshal会尽可能解析，当遇到解析不了的时候，会跳过，并解析剩下的，但是同时会返回错误，让用户知道。</p>
+<p>接触到GraphQL是在一个偶然的机会，发现公司有团队使用GraphQL，让我通过GraphQL的playground去调用他们接口，当时年少无知的我，对GraphQL一点不了解，从字面意思感觉是一个图数据库，然后GraphQL是这个数据库的一种查询语言。。OK，换回正题。</p>
+<h3 id="什么是GraphQL"><a href="#什么是GraphQL" class="headerlink" title="什么是GraphQL"></a>什么是GraphQL</h3><p>GraphQL是一种API规范，而非什么图数据库或者图数据库查询语言。</p>
+<h3 id="为什么要有GraphQL，而且目前正要威胁到目前最流行的API规范——RESTful呢"><a href="#为什么要有GraphQL，而且目前正要威胁到目前最流行的API规范——RESTful呢" class="headerlink" title="为什么要有GraphQL，而且目前正要威胁到目前最流行的API规范——RESTful呢"></a>为什么要有GraphQL，而且目前正要威胁到目前最流行的API规范——RESTful呢</h3><p>从历史上看，RESTful规范是是Roy Thomas Fielding在他2000年的博士论文中提出的，在当时是一种比较先进的思想，不管是约束Web服务中的数据格式，还是使得服务更通用。而在当前仍然主流的原因呢？一是让前后端分离，后端只需要把请求的响应以json格式返回给前端；二是在微服务流行的当下，服务之间通过RPC进行调用，而RESTful规范对响应进行结构化约束，可以降低开发人员的沟通成本（通过API规范就能知道对方的服务怎么使用）。既然RESTful那么好，为什么GraphQL会威胁到RESTful的地位呢？我先给出结论，再通过例子进行说明。结论是GraphQL可以减轻RESTful规范的冗余。</p>
+<p>首先，我们构造一种情景，在一个图书管理系统中，我们打开一个介绍某本书的页面。这时，这个页面应该包括图书信息，以及部分图书作者信息（这是比较初略的，一般的话还会有更多信息，例如库存等）。</p>
+<p>RESTful：</p>
+<p><img src="/images/RESTful.jpg" alt="RESTful"></p>
+<p>GraphQL:</p>
+<p><img src="/images/GraphQL.png" alt="GraphQL"></p>
+<p>对比可以看出，RESTful获取图书信息和作者信息时，会进行两次请求，先拿到图书信息和作者Id，再通过作者Id拿到作者信息，这还是相对简单的情况，当一个页面需要的信息变多时，RESTful请求次数会更多。当然，有的人可能会说：噢，为什么要请求两次，我把图书信息和作者信息都封装在一个请求中，不就能做到一次请求获取图书信息和作者信息了么？ok，这种想法当然是很正常的。但是RESTful的冗余的设计会体现在，当你这时候又突然需要在图书信息和作者信息之上，再增加国家信息的时候（获得作者所在国家的国家信息）或者又有一个页面仅仅只需要图书信息的时候，RESTful就又得开发一套接口了。</p>
+<p>我们再来看看，GraphQL的表现，上面我们介绍了什么是GraphQL，仅仅是从一个很浅的层面说了GraphQL是一种API规范。GraphQL还是一种结构化的API查询语言。易于拓展，还是以上边为例，当需要图书信息和作者信息时，在请求的json中显示的声明就可以拿到，如果仅需要图书信息时，可以把声明的作者信息给去掉，接口就会仅返回图书信息（根据上图可以想象得到）。GraphQL可以动态获取自己想要的数据，从一个终端，而RESTful需要实现相对应的功能则需要开发多个终端，所以GraphQL极大的降低了开发成本，提高开发效率。此外，GraphQL是在API层面的统一，不侵入数据库，开发人员可以在接口层面统一，实现GraphQL的终端（/graphQL/playground）。不过在数据库设计时，抽象成图的结构，会更加方便GraphQL在API层的统一，因为GraphQL这个API规范，结构就很像一个图，就如它的名字一样GraphQL，图的查询语言，不过是在API层面的抽象。</p>
+<p><img src="/images/graphStruct.png" alt="graphStruct"></p>
+<h3 id="我们可以怎么使用GraphQL"><a href="#我们可以怎么使用GraphQL" class="headerlink" title="我们可以怎么使用GraphQL"></a>我们可以怎么使用GraphQL</h3><p>既然发现了GraphQL的好，那么就会想要使用到自己到项目中。我自己也有思考过这个问题，什么样的项目时候使用GraphQL。首先GraphQL是以图为结构的API查询语言，自然是希望项目的结构能转换成图的结构（关系型数据），就像上图的这种，书和作者有关联关系，作者又和图书有关联关系。对于项目无法转换成相连接的关系结构的，那使用GraphQL或者API抽象成GraphQL其实反倒是增加了开发成本。此外，如果发现项目适合使用GraphQL，但是已经项目已经开发了，不希望全部重构，只在新的部分使用GraphQL也是ok的，因为GraphQL是API层面的抽象，因此你可以选择在想使用的地方使用它。</p>
 
       
     </div>
@@ -302,7 +306,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/go/" rel="tag">#go</a>
+            <a href="/tags/GraphQL/" rel="tag">#GraphQL</a>
           
         </div>
       
@@ -311,17 +315,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/12/29/比特币原理浅谈/" rel="next" title="比特币原理浅谈">
-                <i class="fa fa-chevron-left"></i> 比特币原理浅谈
+              <a href="/2021/01/11/Golang-json-Unmarshal小坑/" rel="next" title="Golang json.Unmarshal小坑">
+                <i class="fa fa-chevron-left"></i> Golang json.Unmarshal小坑
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2021/01/20/什么是GraphQL以及为什么要使用GraphQL而非RESTFUL/" rel="prev" title="什么是GraphQL以及为什么要使用GraphQL而非RESTFUL">
-                什么是GraphQL以及为什么要使用GraphQL而非RESTFUL <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -446,7 +446,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原因"><span class="nav-number">2.</span> <span class="nav-text">原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#more"><span class="nav-number">3.</span> <span class="nav-text">more</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是GraphQL"><span class="nav-number">1.</span> <span class="nav-text">什么是GraphQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么要有GraphQL，而且目前正要威胁到目前最流行的API规范——RESTful呢"><span class="nav-number">2.</span> <span class="nav-text">为什么要有GraphQL，而且目前正要威胁到目前最流行的API规范——RESTful呢</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#我们可以怎么使用GraphQL"><span class="nav-number">3.</span> <span class="nav-text">我们可以怎么使用GraphQL</span></a></li></ol></div>
             
           </div>
         </section>
